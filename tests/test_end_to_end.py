@@ -134,6 +134,6 @@ def test_dashboard_renders_picks_and_paper_section():
     s, st, client, an = setup()
     pairs, analyses = an.scan()
     page = render(pairs, s, st, "MODEL NOT YET VALIDATED", len(analyses), len(analyses))
-    assert "<title>Kalshi Picks</title>" in page and "Recommended now" in page
+    assert "<title>Kalshi Picks</title>" in page and "picks found" in page and "data-t=\"soccer\"" in page
     assert "Buy <b>YES</b>" in page and "Paper trading" in page and "MODEL NOT YET VALIDATED" in page
     assert "No qualifying trades found." in render([], s, st, "x", 0, 0)
