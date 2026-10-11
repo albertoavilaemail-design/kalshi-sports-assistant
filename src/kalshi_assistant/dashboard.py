@@ -228,21 +228,43 @@ def _verdict(g, pairs) -> str:
     return f'<div class="verdict no"><b>NO TRADE</b> — {e(why)} ({len(mine)} market{"s" if len(mine) != 1 else ""} checked).</div>'
 
 
-def _live_board(games, pairs, sport: str | None = None) -> str:
-    if sport is not None:  # use the Kalshi market's sport label, the same one the tabs use
-        ids = {a.game.game_id for _, a in pairs if a.game and a.market.sport == sport}
-        games = [g for g in games if g.game_id in ids]
-    games = [g for g in games if g.home_score is not None]
-    if not games:
-        return ""
+def _game_row(g, pairs, show_score: bool) -> str:
     e = html.escape
-    rows = []
-    for g in sorted(games, key=lambda g: (g.sport, g.start_time or datetime.max.replace(tzinfo=TZ))):
+    if show_score and g.home_score is not None:
         clock = "Halftime" if g.status == "halftime" else f"{g.display_clock} · period {g.period}"
-        rows.append(f'<div class="card"><div class="score"><span>{_logo(g.away, 18)}{e(g.away.short_name or g.away.name)}</span><b>{g.away_score:g}</b>'
-                    f'<span>{_logo(g.home, 18)}{e(g.home.short_name or g.home.name)}</span><b>{g.home_score:g}</b>'
-                    f'<span class="clk">{e(g.sport.upper())} · {e(clock)}</span></div>{_verdict(g, pairs)}</div>')
-    return '<h3>Live now</h3>' + "".join(rows)
+        head = (f'<div class="score"><span>{_logo(g.away, 18)}{e(g.away.short_name or g.away.name)}</span><b>{g.away_score:g}</b>'
+                f'<span>{_logo(g.home, 18)}{e(g.home.short_name or g.home.name)}</span><b>{g.home_score:g}</b>'
+                f'<span class="clk">{e(clock)}</span></div>')
+    else:
+        at = "vs" if g.sport == "soccer" else "@"
+        when = g.start_time.astimezone(TZ).strftime("%a %I:%M %p").replace(" 0", " ") if g.start_time else "time n/a"
+        head = (f'<div class="top"><div class="match"><span class="teams">{_logo(g.away)}{e(g.away.short_name or g.away.name)}'
+                f'<span class="at">{at}</span>{_logo(g.home)}{e(g.home.short_name or g.home.name)}</span></div>'
+                f'<div class="when">{e(when)}</div></div>')
+    return f'<div class="card">{head}{_verdict(g, pairs)}</div>'
+
+
+def _games_board(analyses, pairs, sport: str | None = None, hours: float = 36, cap: int = 25) -> str:
+    """Every live game plus games starting soon, each with a TRADE / NO TRADE verdict."""
+    if analyses is None:
+        return ""
+    now = datetime.now(TZ)
+    games: dict[str, object] = {}
+    for a in analyses:
+        g = a.game
+        if not g or g.game_id in games or (sport is not None and a.market.sport != sport):
+            continue
+        if g.is_live or (g.status == "scheduled" and g.start_time and 0 <= (g.start_time - now).total_seconds() <= hours * 3600):
+            games[g.game_id] = g
+    live = [g for g in games.values() if g.is_live]
+    soon = sorted((g for g in games.values() if not g.is_live), key=lambda g: g.start_time)
+    out = ""
+    if live:
+        out += "<h3>Live now</h3>" + "".join(_game_row(g, pairs, True) for g in live)
+    if soon:
+        more = f'<div class="meta">+{len(soon) - cap} more games not shown.</div>' if len(soon) > cap else ""
+        out += "<h3>Coming up</h3>" + "".join(_game_row(g, pairs, False) for g in soon[:cap]) + more
+    return out
 
 
 def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, storage: Storage,
@@ -281,10 +303,10 @@ def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, 
     tab_html = "".join(f'<button class="tab" role="tab" data-t="{k}" aria-selected="false">{n}<span class="n">{c}</span></button>'
                        for k, n, c in tabs)
     panels = {
-        "all": _live_board(games_live, pairs) + _list(all_items),
-        "nfl": _live_board(games_live, pairs, "nfl") + _list(by["nfl"]),
-        "ncaaf": _live_board(games_live, pairs, "ncaaf") + _list(by["ncaaf"]),
-        "soccer": (_live_board(games_live, pairs, "soccer") + "<h3>Big clubs</h3>" + _list(big, "No big-club picks right now.")
+        "all": _games_board(analyses, pairs) + _list(all_items),
+        "nfl": _games_board(analyses, pairs, "nfl") + _list(by["nfl"]),
+        "ncaaf": _games_board(analyses, pairs, "ncaaf") + _list(by["ncaaf"]),
+        "soccer": (_games_board(analyses, pairs, "soccer") + "<h3>Big clubs</h3>" + _list(big, "No big-club picks right now.")
                    + "<h3>Big-club matches to watch</h3>" + _watch(pairs)
                    + "<h3>Other soccer picks</h3>" + _list(other)),
     }

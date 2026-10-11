@@ -64,6 +64,7 @@ jobs:
           set -o pipefail
           mkdir -p reports
           kalshi-assistant scan --all --limit 15 --html site/index.html --live-file reports/live_games.count 2>&1 | tee reports/last_scan.txt
+          cp site/index.html reports/dashboard_html.txt 2>/dev/null || true
       - name: Publish results to the run Summary
         if: always()
         run: |
