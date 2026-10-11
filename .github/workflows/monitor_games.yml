@@ -42,8 +42,9 @@ jobs:
       - name: Monitoring pass (live games, halftime, positions)
         run: |
           set -o pipefail
-          kalshi-assistant monitor 2>&1 | tee monitor.txt
-          { echo '```'; cat monitor.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          mkdir -p reports
+          kalshi-assistant monitor 2>&1 | tee reports/last_monitor.txt
+          { echo '```'; cat reports/last_monitor.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
       - name: Save state
         if: always()
         run: bash scripts/state.sh push

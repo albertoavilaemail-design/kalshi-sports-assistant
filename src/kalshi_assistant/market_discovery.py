@@ -194,24 +194,42 @@ def _detect_period(text: str, ticker: str) -> str:
     return "full"
 
 
+# Kalshi game-market series follow a consistent ticker scheme, e.g. KXNFLGAME, KXNFL1HTOTAL,
+# KXEPL2HSPREAD, KXNCAAF3QTOTAL, KXLALIGATEAMTOTAL. Only these exact shapes are accepted: season
+# futures (KXNFLAFCEAST), props (KXNCAAFTEAMYDS), other leagues (KXBUNDESLIGA2GAME, KXCPLMATCH)
+# and bare championship series (KXSERIEA) are rejected instead of guessed.
+LEAGUE_CODES = {"NFL": ("nfl", "nfl"), "NCAAF": ("ncaaf", "ncaaf"), "EPL": ("soccer", "epl"),
+                "UCL": ("soccer", "ucl"), "LALIGA": ("soccer", "laliga"), "BUNDESLIGA": ("soccer", "bundesliga"),
+                "SERIEA": ("soccer", "seriea"), "LIGUE1": ("soccer", "ligue1"), "MLS": ("soccer", "mls")}
+SUFFIX_TYPES = {"": "winner", "GAME": "winner", "WINNER": "winner", "SPREAD": "spread", "TOTAL": "total",
+                "TEAMTOTAL": "team_total", "BTTS": "btts"}
+TICKER_RE = re.compile(r"^KX(NFL|NCAAF|EPL|UCL|LALIGA|BUNDESLIGA|SERIEA|LIGUE1|MLS)"
+                       r"(1H|2H|1Q|2Q|3Q|4Q)?(GAME|WINNER|SPREAD|TEAMTOTAL|TOTAL|BTTS)?$")
+
+
 def classify_series(series: dict, settings: Settings) -> SeriesInfo | None:
-    ticker = series.get("ticker", "")
+    ticker = str(series.get("ticker", "")).upper()
     title = series.get("title", "")
-    override = settings.sports.series_overrides.get(ticker)
     fee = FeeModel.from_series(series, settings.value.taker_fee_rate, settings.value.maker_fee_rate)
+    override = settings.sports.series_overrides.get(ticker)
     if override:
         return SeriesInfo(ticker, title, override["sport"], override.get("competition", override["sport"]),
                           override["market_type"], override.get("period", "full"), fee, series)
-    text = " ".join([title, " ".join(series.get("tags") or [])])
-    if FUTURES_HINTS.search(title):
+    m = TICKER_RE.match(ticker)
+    if not m:
         return None
-    sport = _detect_sport(text, ticker)
-    if not sport:
-        return None
-    mtype = _detect_market_type(title, ticker)
-    if not mtype:
-        return None
-    return SeriesInfo(ticker, title, sport[0], sport[1], mtype, _detect_period(title, ticker), fee, series)
+    league, period, suffix = m.group(1), m.group(2) or "", m.group(3) or ""
+    if not period and not suffix:
+        return None  # bare league series = championship futures
+    sport, comp = LEAGUE_CODES[league]
+    mtype = SUFFIX_TYPES[suffix]
+    if period.endswith("Q"):
+        if sport == "soccer":
+            return None
+        period = "Q" + period[0]
+    if sport != "soccer" and mtype == "btts":
+        return None  # "both teams score in a quarter" is not modeled
+    return SeriesInfo(ticker, title, sport, comp, mtype, period or "full", fee, series)
 
 
 _NUM = re.compile(r"(-?\d+(?:\.\d+)?)")

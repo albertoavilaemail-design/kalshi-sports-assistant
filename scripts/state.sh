@@ -13,6 +13,8 @@ if [ "$MODE" = "pull" ]; then
   if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
     git fetch --quiet --depth=1 origin "$BRANCH"
     git show "FETCH_HEAD:assistant.db" > "$DB"
+    mkdir -p reports
+    for f in $(git ls-tree --name-only FETCH_HEAD reports/ 2>/dev/null); do git show "FETCH_HEAD:$f" > "$f"; done
     echo "Restored state from branch $BRANCH ($(wc -c < "$DB") bytes)"
   else
     echo "No state branch yet; starting fresh."
@@ -26,7 +28,12 @@ PY
   export GIT_AUTHOR_NAME="state-bot" GIT_AUTHOR_EMAIL="state-bot@users.noreply.github.com"
   export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME" GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
   BLOB=$(git hash-object -w "$DB")
-  TREE=$(printf '100644 blob %s\tassistant.db\n' "$BLOB" | git mktree)
+  ENTRIES=$(printf '100644 blob %s\tassistant.db\n' "$BLOB")
+  if ls reports/*.txt >/dev/null 2>&1; then
+    RTREE=$(for f in reports/*.txt; do printf '100644 blob %s\t%s\n' "$(git hash-object -w "$f")" "$(basename "$f")"; done | git mktree)
+    ENTRIES="$ENTRIES"$'\n'"$(printf '040000 tree %s\treports' "$RTREE")"
+  fi
+  TREE=$(printf '%s\n' "$ENTRIES" | git mktree)
   COMMIT=$(git commit-tree "$TREE" -m "state $(date -u +%Y-%m-%dT%H:%M:%SZ)")
   git push --quiet --force origin "$COMMIT:refs/heads/$BRANCH"
   echo "Saved state to branch $BRANCH"

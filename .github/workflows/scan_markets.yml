@@ -38,13 +38,14 @@ jobs:
       - name: Scan Kalshi sports markets (results appear on this run's Summary page)
         run: |
           set -o pipefail
-          kalshi-assistant scan --all --limit 15 2>&1 | tee scan.txt
+          mkdir -p reports
+          kalshi-assistant scan --all --limit 15 2>&1 | tee reports/last_scan.txt
       - name: Publish results to the run Summary
         if: always()
         run: |
           echo "## Kalshi sports scan - $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat scan.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "scan produced no output" >> "$GITHUB_STEP_SUMMARY"
+          cat reports/last_scan.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "scan produced no output" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "Estimates only - not guarantees. Paper/recommendation mode." >> "$GITHUB_STEP_SUMMARY"
       - name: Pregame alerts to Telegram (skipped quietly if Telegram secrets are not set)

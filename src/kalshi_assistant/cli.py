@@ -56,6 +56,12 @@ def cmd_scan(ctx: Ctx, args) -> None:
     pairs, analyses = ctx.analyzer.scan(sports=sports, account=ctx.account, budget=args.available)
     ok = sum(1 for a in analyses if a.status == OK)
     print(f"Scanned {len(analyses)} Kalshi markets ({ok} priced by the model, {len(analyses) - ok} DATA UNAVAILABLE).")
+    if len(analyses) - ok:
+        from collections import Counter
+        why = Counter((a.notes[-1] if a.notes else "unknown") for a in analyses if a.status != OK)
+        print("Why markets were skipped:")
+        for reason, n in why.most_common(6):
+            print(f"  {n:4d} x {reason[:140]}")
     print(format_ranked(pairs, args.limit, show_all=args.all))
 
 
