@@ -23,7 +23,8 @@ BIG_CLUBS = ["barcelona", "real madrid", "atletico", "atlético", "bayern", "dor
              "manchester city", "man city", "manchester united", "man united", "liverpool", "arsenal", "chelsea",
              "tottenham", "inter", "milan", "juventus", "napoli"]
 
-CSS = """
+CSS = """.verdict{margin-top:8px;font-size:14px;line-height:1.4}.verdict.yes b{color:#16a34a}.verdict.no b{color:#dc2626}
+
 :root{--bg:#f4f5f8;--card:#fff;--ink:#14161b;--mute:#5d6470;--line:#e2e5ea;--good:#13795b;--bad:#c2341f;--warn:#9a5800;
 --accent:#2d5bd7;--soft:#e9eefc;--track:#eceff3}
 @media (prefers-color-scheme:dark){:root{--bg:#0e1014;--card:#171a20;--ink:#eceef2;--mute:#9aa2ae;--line:#2a2f38;
@@ -191,23 +192,57 @@ def live_games(analyses) -> list:
     return list(seen.values())
 
 
-def _live_board(games) -> str:
+_REASONS = (
+    ("outside the $", "prices are at extremes the model isn't trusted on"),
+    ("no two-sided quote", "markets are too thin to trade"),
+    ("spread", "the gap between buy and sell prices is too wide"),
+    ("missing information", "the model disagrees with the market so much it's probably missing something"),
+    ("risk limit", "your paper bankroll is already at its risk limit"),
+    ("not traded by default", "those bet types (single quarters) are switched off"),
+    ("stale", "the score data is too old"),
+)
+
+
+def _plain_reason(reasons: list[str]) -> str:
+    for r in reasons:
+        for key, txt in _REASONS:
+            if key in r:
+                return txt
+    return reasons[0][:120] if reasons else "no market has enough estimated value after fees"
+
+
+def _verdict(g, pairs) -> str:
+    e = html.escape
+    mine = [(o, a) for o, a in pairs if a.game and a.game.game_id == g.game_id]
+    picks = sorted([t for t in mine if t[0].qualifies], key=lambda t: -t[0].score)
+    if picks:
+        o, a = picks[0]
+        more = f" (+{len(picks) - 1} more below)" if len(picks) > 1 else ""
+        return (f'<div class="verdict yes"><b>TRADE:</b> {e(o.contract_label)} — BUY {o.side.upper()} @ ${o.price:.2f}, '
+                f'est. {o.prob:.0%}{e(more)} · paper only until the model is validated</div>')
+    if not mine:
+        return '<div class="verdict no"><b>NO TRADE</b> — no Kalshi markets for this game could be priced.</div>'
+    from collections import Counter
+    c = Counter(_plain_reason(o.fail_reasons) for o, _ in mine)
+    why = c.most_common(1)[0][0]
+    return f'<div class="verdict no"><b>NO TRADE</b> — {e(why)} ({len(mine)} market{"s" if len(mine) != 1 else ""} checked).</div>'
+
+
+def _live_board(games, pairs, sport: str | None = None) -> str:
+    if sport is not None:  # use the Kalshi market's sport label, the same one the tabs use
+        ids = {a.game.game_id for _, a in pairs if a.game and a.market.sport == sport}
+        games = [g for g in games if g.game_id in ids]
+    games = [g for g in games if g.home_score is not None]
     if not games:
         return ""
     e = html.escape
     rows = []
     for g in sorted(games, key=lambda g: (g.sport, g.start_time or datetime.max.replace(tzinfo=TZ))):
-        if g.home_score is None:
-            continue
         clock = "Halftime" if g.status == "halftime" else f"{g.display_clock} · period {g.period}"
-        rows.append(f'<div class="score"><span>{_logo(g.away, 18)}{e(g.away.short_name or g.away.name)}</span><b>{g.away_score:g}</b>'
+        rows.append(f'<div class="card"><div class="score"><span>{_logo(g.away, 18)}{e(g.away.short_name or g.away.name)}</span><b>{g.away_score:g}</b>'
                     f'<span>{_logo(g.home, 18)}{e(g.home.short_name or g.home.name)}</span><b>{g.home_score:g}</b>'
-                    f'<span class="clk">{e(g.sport.upper())} · {e(clock)}</span></div>')
-    if not rows:
-        return ""
-    return ('<h2>Live games being watched</h2><div class="card">' + "".join(rows)
-            + '<div class="meta">The model is pricing these games\' markets every few minutes. '
-              'A game only shows up under picks if a trade passes every safety check.</div></div>')
+                    f'<span class="clk">{e(g.sport.upper())} · {e(clock)}</span></div>{_verdict(g, pairs)}</div>')
+    return '<h3>Live now</h3>' + "".join(rows)
 
 
 def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, storage: Storage,
@@ -246,10 +281,10 @@ def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, 
     tab_html = "".join(f'<button class="tab" role="tab" data-t="{k}" aria-selected="false">{n}<span class="n">{c}</span></button>'
                        for k, n, c in tabs)
     panels = {
-        "all": _list(all_items),
-        "nfl": _list(by["nfl"]),
-        "ncaaf": _list(by["ncaaf"]),
-        "soccer": ("<h3>Big clubs</h3>" + _list(big, "No big-club picks right now.")
+        "all": _live_board(games_live, pairs) + _list(all_items),
+        "nfl": _live_board(games_live, pairs, "nfl") + _list(by["nfl"]),
+        "ncaaf": _live_board(games_live, pairs, "ncaaf") + _list(by["ncaaf"]),
+        "soccer": (_live_board(games_live, pairs, "soccer") + "<h3>Big clubs</h3>" + _list(big, "No big-club picks right now.")
                    + "<h3>Big-club matches to watch</h3>" + _watch(pairs)
                    + "<h3>Other soccer picks</h3>" + _list(other)),
     }
@@ -267,7 +302,6 @@ def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, 
 <div class="stat"><b>{priced:,}</b><span>markets priced</span></div></div>
 <div class="tabs" role="tablist">{tab_html}</div>
 {panel_html}
-{_live_board(games_live)}
 <h2>Is the model any good?</h2>
 {check}
 <h2>Paper trading (fake money)</h2>
