@@ -58,6 +58,9 @@ class ValueConfig:
     # Simple rating models are usually less accurate than liquid markets; shrinking toward
     # the market cuts false "edges". Raise only if backtests/paper results justify it.
     model_weight: float = 0.6
+    # If the pure model differs from the market mid by more than this, the market almost certainly
+    # knows something the model doesn't (injury, live game state, model error) -> never qualifies.
+    max_model_market_gap: float = 0.15
     taker_fee_rate: float = 0.07  # Kalshi general schedule coefficient
     maker_fee_rate: float = 0.0175
     max_report: int = 10

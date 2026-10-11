@@ -100,3 +100,12 @@ def test_over_under_label_and_spec_description():
     spec = ContractSpec("total", line=44.5, direction="over")
     o = evaluate_side(market(spec=spec), "no", 0.5, 1.0, settings())
     assert o.contract_label == "NOT (Total > 44.5)"
+
+
+def test_huge_model_market_gap_never_qualifies():
+    s = settings(min_edge=0.0, min_net_ev_per_dollar=0.0)
+    s.value.max_model_market_gap = 0.15
+    o = evaluate_side(market(yes_bid=0.07, yes_ask=0.08), "yes", 0.41, 1.0, s)
+    assert not o.qualifies and any("missing information" in r for r in o.fail_reasons)
+    ok = evaluate_side(market(yes_bid=0.48, yes_ask=0.50), "yes", 0.60, 1.0, s)
+    assert ok.qualifies

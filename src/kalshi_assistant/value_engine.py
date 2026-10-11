@@ -125,6 +125,12 @@ def _qualify(opp: Opportunity, s: Settings, now: float | None) -> None:
         r.append(f"bid-ask spread {opp.spread:.2f} exceeds {v.max_spread:.2f}")
     if opp.depth is not None and opp.depth < v.min_depth_contracts:
         r.append(f"only {opp.depth:.0f} contracts at the ask (< {v.min_depth_contracts:.0f})")
+    if mk.yes_bid is not None and mk.yes_ask is not None:
+        mid = (mk.yes_bid + mk.yes_ask) / 2
+        side_mid = mid if opp.side == "yes" else 1 - mid
+        gap = abs(opp.model_prob_raw - side_mid)
+        if gap > v.max_model_market_gap:
+            r.append(f"model differs from market by {gap:.0%} (> {v.max_model_market_gap:.0%}): treated as missing information, not an edge")
     if opp.reliability < v.min_reliability:
         r.append(f"model reliability {opp.reliability:.2f} below {v.min_reliability:.2f}")
     if opp.edge < v.min_edge:

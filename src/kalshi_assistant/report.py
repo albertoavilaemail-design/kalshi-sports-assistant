@@ -23,11 +23,15 @@ def format_short(o: Opportunity, a: MarketAnalysis, i: int) -> str:
     g = a.game
     kick = g.start_time.astimezone().strftime("%a %m/%d %I:%M%p") if g and g.start_time else "time n/a"
     flag = "QUALIFIES" if o.qualifies else "does not qualify: " + "; ".join(o.fail_reasons[:2])
+    live = ""
+    if g and g.is_live:
+        live = (f"\n    live: {g.home.name} {g.home_score:g}-{g.away_score:g} {g.away.name} | period {g.period} clock {g.display_clock} "
+                f"| by period {g.home_period_scores} / {g.away_period_scores}")
     return (f"{i:2d}. [{a.market.sport.upper()}/{a.market.competition}] {a.market.event_title} ({kick}, {o.context})\n"
             f"    {o.contract_label} -> BUY {o.side.upper()} @ ${o.price:.2f} | est. prob {o.prob:.1%} "
             f"(model {o.model_prob_raw:.1%}) | edge {o.edge:+.3f} | net EV/$ {o.net_ev_per_dollar():+.3f}\n"
             f"    size {o.contracts:g} contract(s), cost ${o.cost_total:.2f}, max loss ${o.max_loss:.2f}, "
-            f"profit if right ${o.profit_if_win:.2f} | {flag}")
+            f"profit if right ${o.profit_if_win:.2f} | {flag}{live}")
 
 
 def format_full(o: Opportunity, a: MarketAnalysis, extras: dict[str, Any] | None = None) -> str:
@@ -102,7 +106,7 @@ def format_ranked(pairs: list[tuple[Opportunity, MarketAnalysis]], limit: int = 
     q = [(o, a) for o, a in pairs if o.qualifies]
     if not q and not show_all:
         return NO_TRADES
-    shown = (pairs if show_all else q)[:limit]
+    shown = (q + [p for p in pairs if not p[0].qualifies] if show_all else q)[:limit]
     body = "\n".join(format_short(o, a, i + 1) for i, (o, a) in enumerate(shown))
     head = f"{len(q)} qualifying opportunit{'y' if len(q) == 1 else 'ies'} (ranked by net EV x reliability x liquidity)"
     if not q:
