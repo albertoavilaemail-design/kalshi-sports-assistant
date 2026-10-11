@@ -66,6 +66,7 @@ class TeamRef:
     location: str = ""
     provider_id: str = ""
     rank: int | None = None  # poll ranking (college) if provided
+    logo: str = ""  # image URL supplied by the data provider
 
     @property
     def key(self) -> str:
@@ -268,6 +269,7 @@ class ESPNProvider:
                 location=t.get("location") or "",
                 provider_id=str(t.get("id") or c.get("id") or ""),
                 rank=rank if isinstance(rank, int) and 0 < rank < 99 else None,
+                logo=str(t.get("logo") or ((t.get("logos") or [{}])[0].get("href")) or ""),
             )
 
         st = (ev.get("status") or comp.get("status") or {})

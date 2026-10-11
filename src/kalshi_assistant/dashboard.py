@@ -62,6 +62,9 @@ h3{font-size:15px;margin:18px 0 6px}
 .score{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:var(--soft);border-radius:10px;padding:8px 10px;margin:8px 0;font-size:14px}
 .score b{font-size:17px;text-align:right}.score .clk{grid-column:1/3;color:var(--mute);font-size:12px}
 .empty{color:var(--mute);padding:16px;text-align:center}
+.logo{width:22px;height:22px;object-fit:contain;vertical-align:-6px;margin-right:6px}
+.score .logo{width:18px;height:18px;vertical-align:-4px}
+.teams{display:inline-flex;align-items:center;flex-wrap:wrap;gap:2px}.at{color:var(--mute);font-weight:400;margin:0 8px}
 a{color:var(--accent)}table{width:100%;border-collapse:collapse;font-size:13px}td{padding:6px 4px;border-top:1px solid var(--line)}
 .vs{display:grid;grid-template-columns:1fr;gap:6px}
 @media (max-width:480px){.grid{grid-template-columns:repeat(2,1fr)}.bar{grid-template-columns:84px 1fr 40px}}
@@ -92,6 +95,22 @@ def _bar(label: str, p: float, cls: str) -> str:
             f'</div></div><b>{p:.0%}</b></div>')
 
 
+def _logo(t, size: int = 22) -> str:
+    if not t or not getattr(t, "logo", ""):
+        return ""
+    return (f'<img class="logo" src="{html.escape(t.logo)}" alt="" width="{size}" height="{size}" loading="lazy" '
+            f'onerror="this.remove()">')
+
+
+def _matchup(a: MarketAnalysis) -> str:
+    g = a.game
+    if not g:
+        return html.escape(a.market.event_title)
+    return (f'<span class="teams">{_logo(g.away)}{html.escape(g.away.short_name or g.away.name)}'
+            f'<span class="at">{"vs" if g.sport == "soccer" else "@"}</span>'
+            f'{_logo(g.home)}{html.escape(g.home.short_name or g.home.name)}</span>')
+
+
 def _score(g) -> str:
     e = html.escape
     if not g or not g.is_live or g.home_score is None:
@@ -100,8 +119,8 @@ def _score(g) -> str:
     extra = ""
     if g.sport == "soccer" and (g.red_cards_home or g.red_cards_away):
         extra = f" · red cards {g.red_cards_home}-{g.red_cards_away}"
-    return (f'<div class="score"><span>{e(g.home.name)}</span><b>{g.home_score:g}</b>'
-            f'<span>{e(g.away.name)}</span><b>{g.away_score:g}</b><span class="clk">{e(clock + extra)}</span></div>')
+    return (f'<div class="score"><span>{_logo(g.home, 18)}{e(g.home.name)}</span><b>{g.home_score:g}</b>'
+            f'<span>{_logo(g.away, 18)}{e(g.away.name)}</span><b>{g.away_score:g}</b><span class="clk">{e(clock + extra)}</span></div>')
 
 
 def _card(o: Opportunity, a: MarketAnalysis) -> str:
@@ -110,8 +129,8 @@ def _card(o: Opportunity, a: MarketAnalysis) -> str:
     what = a.market.spec.describe() if a.market.spec else a.market.title
     live = '<span class="badge"><span class="dot"></span>LIVE</span> ' if g and g.is_live else ""
     return f"""<div class="card{' big' if a.market.sport == 'soccer' and _is_big(a) else ''}">
-<div class="top"><div class="match">{live}{e(a.market.event_title)}</div><div class="when">{e(_t(g.start_time if g else None))}</div></div>
-<div class="meta">{e(a.market.sport.upper())} · {e(a.market.competition)}</div>
+<div class="top"><div class="match">{live}{_matchup(a)}</div><div class="when">{e(_t(g.start_time if g else None))}</div></div>
+<div class="meta">{e(a.market.sport.upper())} · {e(a.market.competition)} · {e(a.market.event_title)}</div>
 {_score(g)}
 <div class="bet">Buy <b>{o.side.upper()}</b> on “{e(what)}” at <b>${o.price:.2f}</b> <span class="pill">edge {o.edge:+.1%}</span></div>
 <div class="bars">{_bar("Our estimate", o.prob, "us")}{_bar("Kalshi price", o.implied_prob, "mk")}</div>
@@ -156,7 +175,7 @@ def _watch(pairs) -> str:
             f'<div class="meta" style="margin-top:4px">{e(a.market.spec.describe())}</div>'
             f'{_bar("Our estimate", o.model_prob_raw, "us")}{_bar("Kalshi price", o.implied_prob, "mk")}'
             for o, a in rows)
-        cards.append(f'<div class="card big"><div class="top"><div class="match">{live}{e(a0.market.event_title)}</div>'
+        cards.append(f'<div class="card big"><div class="top"><div class="match">{live}{_matchup(a0)}</div>'
                      f'<div class="when">{e(when)}</div></div>{_score(g)}<div class="bars">{lines}</div>'
                      f'<div class="meta">No pick unless it also appears above. <a href="{e(a0.market.url)}">Kalshi</a></div></div>')
     return "\n".join(cards) or '<div class="card empty">No big-club matches listed on Kalshi right now.</div>'

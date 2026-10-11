@@ -141,3 +141,13 @@ def test_espn_event_parsing_and_matching():
     assert match_side("Dallas", g) is None  # unknown team -> no guess
     assert find_game("New York Jets at Buffalo Bills", [g]) is g
     assert find_game("Dallas at Houston", [g]) is None
+
+
+def test_espn_logo_is_captured():
+    ev = {**MOCK_ESPN_EVENT}
+    comp = dict(ev["competitions"][0])
+    c0 = dict(comp["competitors"][0]); c0["team"] = {**c0["team"], "logo": "https://example.invalid/mock-logo.png"}
+    comp["competitors"] = [c0, comp["competitors"][1]]
+    ev["competitions"] = [comp]
+    g = ESPNProvider(session=FakeSession([])).parse_event(ev, "nfl", "nfl")
+    assert g.home.logo.endswith("mock-logo.png") and g.away.logo == ""
