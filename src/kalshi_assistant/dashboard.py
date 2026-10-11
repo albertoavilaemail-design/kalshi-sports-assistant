@@ -181,14 +181,46 @@ def _watch(pairs) -> str:
     return "\n".join(cards) or '<div class="card empty">No big-club matches listed on Kalshi right now.</div>'
 
 
-def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, storage: Storage,
-           banner: str, scanned: int, priced: int, limit: int = 20) -> str:
+def live_games(analyses) -> list:
+    """Distinct games that are in progress right now, among the markets scanned (picks or not)."""
+    seen: dict[str, object] = {}
+    for a in analyses or []:
+        g = a.game
+        if g and g.is_live and g.game_id not in seen:
+            seen[g.game_id] = g
+    return list(seen.values())
+
+
+def _live_board(games) -> str:
+    if not games:
+        return ""
     e = html.escape
-    now = datetime.now(TZ).strftime("%a %b %d, %I:%M %p %Z")
+    rows = []
+    for g in sorted(games, key=lambda g: (g.sport, g.start_time or datetime.max.replace(tzinfo=TZ))):
+        if g.home_score is None:
+            continue
+        clock = "Halftime" if g.status == "halftime" else f"{g.display_clock} · period {g.period}"
+        rows.append(f'<div class="score"><span>{_logo(g.away, 18)}{e(g.away.short_name or g.away.name)}</span><b>{g.away_score:g}</b>'
+                    f'<span>{_logo(g.home, 18)}{e(g.home.short_name or g.home.name)}</span><b>{g.home_score:g}</b>'
+                    f'<span class="clk">{e(g.sport.upper())} · {e(clock)}</span></div>')
+    if not rows:
+        return ""
+    return ('<h2>Live games being watched</h2><div class="card">' + "".join(rows)
+            + '<div class="meta">The model is pricing these games\' markets every few minutes. '
+              'A game only shows up under picks if a trade passes every safety check.</div></div>')
+
+
+def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, storage: Storage,
+           banner: str, scanned: int, priced: int, limit: int = 20, analyses=None) -> str:
+    e = html.escape
+    now_dt = datetime.now(TZ)
+    now = now_dt.strftime("%a %b %d, %I:%M %p %Z")
+    games_live = live_games(analyses)
     q = [(o, a) for o, a in pairs if o.qualifies]
     by = {k: [t for t in q if t[1].market.sport == k][:limit] for k in ("nfl", "ncaaf", "soccer")}
     all_items = _order([t for k in by for t in by[k]])[:30]
-    live_n = sum(1 for _, a in all_items if a.game and a.game.is_live)
+    live_n = len(games_live) if analyses is not None else sum(1 for _, a in all_items if a.game and a.game.is_live)
+    cadence = "updating every few minutes while games are live" if games_live else "updates hourly, every few minutes once games go live"
     big = [t for t in by["soccer"] if _is_big(t[1])]
     other = [t for t in by["soccer"] if not _is_big(t[1])]
 
@@ -225,15 +257,17 @@ def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, 
 
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Kalshi Picks</title>
+<meta http-equiv="refresh" content="120">
 <style>{CSS}</style></head><body><main>
 <h1>Kalshi Picks</h1>
-<div class="meta">Updated {e(now)} · refreshes about every hour</div>
+<div class="meta" id="upd" data-ts="{int(now_dt.timestamp())}">Updated {e(now)} · {cadence}</div>
 <div class="banner">{e(banner)}</div>
 <div class="stats"><div class="stat"><b>{len(q)}</b><span>picks found</span></div>
-<div class="stat"><b>{live_n}</b><span>live now</span></div>
+<div class="stat"><b>{live_n}</b><span>live games</span></div>
 <div class="stat"><b>{priced:,}</b><span>markets priced</span></div></div>
 <div class="tabs" role="tablist">{tab_html}</div>
 {panel_html}
+{_live_board(games_live)}
 <h2>Is the model any good?</h2>
 {check}
 <h2>Paper trading (fake money)</h2>
@@ -250,5 +284,9 @@ Only risk money set aside for entertainment.</p>
   tabs.forEach(function(t){{t.addEventListener('click',function(){{show(t.dataset.t)}})}});
   var k='all';try{{k=localStorage.getItem('ksa-tab')||'all'}}catch(e){{}}
   show(k);
+  var u=document.getElementById('upd');
+  if(u){{var age=Math.round((Date.now()/1000-(+u.dataset.ts))/60);
+    if(age>=1){{u.textContent+=' · '+age+' min ago';}}
+    if(age>45){{u.textContent+=' (behind schedule - GitHub may be running late)';u.style.color='#d97706';}}}}
 }})();
 </script></body></html>"""

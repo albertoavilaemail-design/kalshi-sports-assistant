@@ -1,6 +1,7 @@
 name: scan-markets
 # One job does everything: scan + dashboard, live/halftime checks, paper trades, settlement.
-# Hourly, plus every 10 minutes during typical game windows. GitHub cron is best-effort (can run late).
+# Hourly, plus every 10 minutes during typical game windows. GitHub cron is best-effort (often 15-20 min late),
+# so while any game is live each run also starts the next one itself (~every 5 min) until no games are live.
 on:
   push:
     branches: [main]              # runs automatically as soon as you upload/commit files
@@ -13,7 +14,17 @@ on:
     - cron: "*/10 0-3 * * 2,5,6"
     - cron: "*/10 18-21 * * 2,3"
   workflow_dispatch:
+    inputs:
+      chained:
+        description: "Started automatically by a previous run because games were live"
+        required: false
+        default: "false"
+      depth:
+        description: "How many chained runs in a row (safety cap)"
+        required: false
+        default: "0"
 permissions:
+  actions: write    # lets a run start the next one while games are live
   contents: write   # needed to save the database to the bot-state branch
   pages: write      # publish the dashboard
   id-token: write
@@ -39,6 +50,7 @@ jobs:
       FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
+      - run: echo "RUN_START=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -51,7 +63,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p reports
-          kalshi-assistant scan --all --limit 15 --html site/index.html 2>&1 | tee reports/last_scan.txt
+          kalshi-assistant scan --all --limit 15 --html site/index.html --live-file reports/live_games.count 2>&1 | tee reports/last_scan.txt
       - name: Publish results to the run Summary
         if: always()
         run: |
@@ -63,7 +75,8 @@ jobs:
       - name: Live games, halftime reports and alerts (prints alerts if Telegram is not set up)
         run: kalshi-assistant monitor --pregame
       - name: Paper-trade the top picks (fake money) to measure whether the model beats the market
-        if: github.event_name != 'schedule' || github.event.schedule == '17 * * * *'
+        # not on the extra 10-min or chained live runs, so paper trading keeps its usual pace
+        if: (github.event_name == 'schedule' && github.event.schedule == '17 * * * *') || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.chained != 'true')
         run: kalshi-assistant paper auto --max 3
       - name: Settle finished paper trades
         run: kalshi-assistant paper settle
@@ -83,3 +96,20 @@ jobs:
         id: deployment
         if: always()
         uses: actions/deploy-pages@v4
+      - name: Keep the page updating while games are live
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPTH: ${{ inputs.depth || '0' }}
+        run: |
+          LIVE=$(cat reports/live_games.count 2>/dev/null || echo 0)
+          echo "Live games: $LIVE (chain depth $DEPTH)"
+          if [ "${LIVE:-0}" -gt 0 ] && [ "$DEPTH" -lt 90 ]; then
+            # pace runs about 5 minutes apart (each run takes 2-4 min)
+            ELAPSED=$(( $(date +%s) - RUN_START ))
+            [ "$ELAPSED" -lt 270 ] && sleep $(( 270 - ELAPSED ))
+            gh workflow run scan_markets.yml --ref "${{ github.ref_name }}" -f chained=true -f depth=$(( DEPTH + 1 ))
+            echo "Started the next live update."
+          else
+            echo "No live games (or safety cap reached); back to the regular schedule."
+          fi

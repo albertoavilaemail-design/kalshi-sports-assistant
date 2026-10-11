@@ -73,8 +73,13 @@ def cmd_scan(ctx: Ctx, args) -> None:
         from .dashboard import render
         out = Path(args.html)
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(render(pairs, ctx.settings, ctx.storage, banner, len(analyses), ok), encoding="utf-8")
+        out.write_text(render(pairs, ctx.settings, ctx.storage, banner, len(analyses), ok, analyses=analyses),
+                       encoding="utf-8")
         print(f"Dashboard written to {out}")
+    if getattr(args, "live_file", None):
+        from pathlib import Path
+        from .dashboard import live_games
+        Path(args.live_file).write_text(str(len(live_games(analyses))), encoding="utf-8")
 
 
 def _game_markets(ctx: Ctx, query: str):
@@ -485,6 +490,7 @@ def parser() -> argparse.ArgumentParser:
         sp.add_argument("--all", action="store_true", help="also show non-qualifying candidates")
         sp.add_argument("--available", type=float, help="cash you are willing to use right now (caps sizing)")
         sp.add_argument("--html", help="also write a dashboard page to this path")
+        sp.add_argument("--live-file", help="write the number of live games found to this file")
     sp = add("game", cmd_game, "analyze one game: game \"Arsenal vs Chelsea\"")
     sp.add_argument("event")
     sp.add_argument("--limit", type=int, default=3)
