@@ -4,15 +4,20 @@ on:
   push:
     branches: [main]              # runs automatically as soon as you upload/commit files
   schedule:
-    - cron: "17 13,17,21 * * *"   # UTC (8:17am, 12:17pm, 4:17pm Central during CDT)
+    - cron: "17 * * * *"          # every hour (free for public repos); keeps the dashboard fresh
   workflow_dispatch:
 permissions:
   contents: write   # needed to save the database to the bot-state branch
+  pages: write      # publish the dashboard
+  id-token: write
 concurrency:
   group: bot-state          # one state-changing run at a time; later runs queue
   cancel-in-progress: false
 jobs:
   scan:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     if: ${{ vars.KSA_DISABLED != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -39,7 +44,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p reports
-          kalshi-assistant scan --all --limit 15 2>&1 | tee reports/last_scan.txt
+          kalshi-assistant scan --all --limit 15 --html site/index.html 2>&1 | tee reports/last_scan.txt
       - name: Publish results to the run Summary
         if: always()
         run: |
@@ -57,3 +62,16 @@ jobs:
       - name: Save state
         if: always()
         run: bash scripts/state.sh push
+      - name: Prepare dashboard
+        if: always()
+        run: test -f site/index.html || { mkdir -p site; echo '<meta charset=utf-8><p>Scan failed this hour - see the Actions tab.</p>' > site/index.html; }
+      - uses: actions/configure-pages@v5
+        if: always()
+      - uses: actions/upload-pages-artifact@v3
+        if: always()
+        with:
+          path: site
+      - name: Publish dashboard
+        id: deployment
+        if: always()
+        uses: actions/deploy-pages@v4

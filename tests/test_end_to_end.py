@@ -127,3 +127,13 @@ def test_live_halftime_and_monitor_tick():
     assert any("live game" in line for line in out)
     assert st.last_decision("halftime", ticker="G1") == "REPORTED"
     assert mon.tick() and st.q("SELECT COUNT(*) AS c FROM alerts WHERE kind='halftime'")[0]["c"] == 1  # once per game
+
+
+def test_dashboard_renders_picks_and_paper_section():
+    from kalshi_assistant.dashboard import render
+    s, st, client, an = setup()
+    pairs, analyses = an.scan()
+    page = render(pairs, s, st, "MODEL NOT YET VALIDATED", len(analyses), len(analyses))
+    assert "<title>Kalshi Picks</title>" in page and "Recommended now" in page
+    assert "Buy <b>YES</b>" in page and "Paper trading" in page and "MODEL NOT YET VALIDATED" in page
+    assert "No qualifying trades found." in render([], s, st, "x", 0, 0)

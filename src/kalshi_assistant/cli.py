@@ -63,8 +63,16 @@ def cmd_scan(ctx: Ctx, args) -> None:
         for reason, n in why.most_common(6):
             print(f"  {n:4d} x {reason[:140]}")
     from .paper_trading import validation_status
-    print(validation_status(ctx.storage)[1])
+    banner = validation_status(ctx.storage)[1]
+    print(banner)
     print(format_ranked(pairs, args.limit, show_all=args.all))
+    if getattr(args, "html", None):
+        from pathlib import Path
+        from .dashboard import render
+        out = Path(args.html)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(render(pairs, ctx.settings, ctx.storage, banner, len(analyses), ok), encoding="utf-8")
+        print(f"Dashboard written to {out}")
 
 
 def _game_markets(ctx: Ctx, query: str):
@@ -474,6 +482,7 @@ def parser() -> argparse.ArgumentParser:
         sp.add_argument("--limit", type=int, default=10)
         sp.add_argument("--all", action="store_true", help="also show non-qualifying candidates")
         sp.add_argument("--available", type=float, help="cash you are willing to use right now (caps sizing)")
+        sp.add_argument("--html", help="also write a dashboard page to this path")
     sp = add("game", cmd_game, "analyze one game: game \"Arsenal vs Chelsea\"")
     sp.add_argument("event")
     sp.add_argument("--limit", type=int, default=3)
