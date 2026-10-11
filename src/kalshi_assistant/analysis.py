@@ -228,6 +228,11 @@ class Analyzer:
         markets = self.discovery.markets(sports=sports, event_filter=event_filter)
         analyses = self.analyze(markets)
         pairs = self.opportunities(analyses, account, budget)
+        from .model_check import apply_injury_filter, record_picks
+        try:
+            apply_injury_filter(self, pairs)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("injury filter failed: %s", exc)
         ranked = rank([o for o, _ in pairs], only_qualifying=False)
         by_id = {id(o): a for o, a in pairs}
         # One pick per game x market type x period: alternate lines of the same market are the same bet.
@@ -242,6 +247,10 @@ class Analyzer:
             if o.qualifies:
                 seen.add(key)
             out.append((o, a))
+        try:
+            record_picks(self.storage, out)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("pick tracking failed: %s", exc)
         return out, analyses
 
     def market_by_ticker(self, ticker: str) -> SportsMarket | None:

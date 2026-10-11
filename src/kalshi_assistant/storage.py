@@ -54,6 +54,11 @@ CREATE TABLE IF NOT EXISTS decisions (
     market_ticker TEXT, position_id TEXT, decision TEXT NOT NULL, detail TEXT);
 CREATE TABLE IF NOT EXISTS watchlist (query TEXT PRIMARY KEY, added REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS locks (name TEXT PRIMARY KEY, holder TEXT NOT NULL, expires REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS picks (
+    market_ticker TEXT NOT NULL, side TEXT NOT NULL, sport TEXT, market_type TEXT, label TEXT,
+    first_ts REAL NOT NULL, first_price REAL NOT NULL, first_mid REAL, model_prob REAL,
+    last_ts REAL, last_mid REAL, started INTEGER NOT NULL DEFAULT 0, kickoff TEXT,
+    PRIMARY KEY (market_ticker, side));
 CREATE TABLE IF NOT EXISTS audit (id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL, actor TEXT, action TEXT, detail TEXT);
 """
 

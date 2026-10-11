@@ -201,6 +201,14 @@ def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, 
              f'<div class="meta">Cash ${br.cash:.2f} · at risk ${br.open_exposure:.2f} · realized P/L ${br.realized_pnl:+.2f}</div>'
              + (f"<table>{rows}</table>" if rows else '<div class="meta">No open paper trades.</div>') + "</div>")
 
+    from .model_check import price_check
+    pc = price_check(storage)
+    if pc.avg_move is not None:
+        toward = pc.pct_toward or 0
+        check = (f'<div class="card"><div class="bars">{_bar("Moved our way", toward, "us")}</div>'
+                 f'<div class="meta">{e(pc.verdict)}</div></div>')
+    else:
+        check = f'<div class="card"><div class="meta">{e(pc.verdict)}</div></div>'
     tabs = [("all", "All", len(all_items)), ("nfl", "NFL", len(by["nfl"])), ("ncaaf", "College", len(by["ncaaf"])),
             ("soccer", "Soccer", len(by["soccer"]))]
     tab_html = "".join(f'<button class="tab" role="tab" data-t="{k}" aria-selected="false">{n}<span class="n">{c}</span></button>'
@@ -226,6 +234,8 @@ def render(pairs: list[tuple[Opportunity, MarketAnalysis]], settings: Settings, 
 <div class="stat"><b>{priced:,}</b><span>markets priced</span></div></div>
 <div class="tabs" role="tablist">{tab_html}</div>
 {panel_html}
+<h2>Is the model any good?</h2>
+{check}
 <h2>Paper trading (fake money)</h2>
 {paper}
 <p class="meta">Estimates, not guarantees. Prices can change after this page was generated — check Kalshi before acting.

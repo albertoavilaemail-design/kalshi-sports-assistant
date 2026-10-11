@@ -63,8 +63,10 @@ def cmd_scan(ctx: Ctx, args) -> None:
         for reason, n in why.most_common(6):
             print(f"  {n:4d} x {reason[:140]}")
     from .paper_trading import validation_status
+    from .model_check import price_check
     banner = validation_status(ctx.storage)[1]
     print(banner)
+    print(price_check(ctx.storage).verdict)
     print(format_ranked(pairs, args.limit, show_all=args.all))
     if getattr(args, "html", None):
         from pathlib import Path
