@@ -25,7 +25,7 @@ class KalshiConfig:
     base_url: str = ""  # derived from environment when empty
     timeout_seconds: float = 15.0
     max_retries: int = 4
-    min_request_interval_seconds: float = 0.12  # client-side throttle (~8 req/s)
+    min_request_interval_seconds: float = 0.25  # client-side throttle (~4 req/s; Kalshi returns 429 above that)
     stale_after_seconds: int = 120  # price data older than this is "stale"
     # Secrets (env only)
     api_key_id: str = ""

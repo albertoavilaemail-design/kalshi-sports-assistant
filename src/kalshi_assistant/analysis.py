@@ -68,24 +68,38 @@ class Analyzer:
         prov = self.soccer_results_provider if (sport == "soccer" and self.soccer_results_provider) else self.provider
         today = date.today()
         start = today - timedelta(days=self.settings.model.history_days)
+        end = today - timedelta(days=1)
+
+        def to_rows(games, fallback_day):
+            return [{
+                "game_id": f"{sport}:{comp}:{g.game_id}", "sport": sport, "competition": comp,
+                "date": (g.start_time or datetime.combine(fallback_day, datetime.min.time())).date().isoformat(),
+                "home": g.home.name, "away": g.away.name, "home_score": g.home_score, "away_score": g.away_score,
+                "neutral": int(g.neutral), "source": g.source, "fetched_at": time.time(),
+            } for g in games if g.status == "final" and g.home_score is not None and g.away_score is not None]
+
         n = 0
-        d = start
-        while d < today:
-            end = min(d + timedelta(days=6), today - timedelta(days=1))
-            wkey = f"results_window:{prov.name}:{sport}:{comp}:{d.isoformat()}"
-            complete = end < today - timedelta(days=3)
-            if not (complete and self.storage.kv_get(wkey)):
-                games = prov.results(sport, comp, d, end)
-                rows = [{
-                    "game_id": f"{sport}:{comp}:{g.game_id}", "sport": sport, "competition": comp,
-                    "date": (g.start_time or datetime.combine(d, datetime.min.time())).date().isoformat(),
-                    "home": g.home.name, "away": g.away.name, "home_score": g.home_score, "away_score": g.away_score,
-                    "neutral": int(g.neutral), "source": g.source, "fetched_at": time.time(),
-                } for g in games if g.home_score is not None and g.away_score is not None]
-                n += self.storage.upsert_results(rows)
-                if complete:
-                    self.storage.kv_set(wkey, True)
-            d = end + timedelta(days=1)
+        if hasattr(prov, "history_chunks"):
+            for ck, fetch in prov.history_chunks(sport, comp, start, end):
+                wkey = f"results_chunk:{prov.name}:{sport}:{comp}:{ck}"
+                if self.storage.kv_get(wkey):
+                    continue
+                games = fetch()
+                n += self.storage.upsert_results(to_rows(games, start))
+                dates = [g.start_time.date() for g in games if g.start_time]
+                if games and all(g.status in ("final", "postponed") for g in games) and max(dates) < today - timedelta(days=3):
+                    self.storage.kv_set(wkey, True)  # finished chunk: never refetch
+        else:
+            d = start
+            while d <= end:
+                e = min(d + timedelta(days=9), end)
+                wkey = f"results_window:{prov.name}:{sport}:{comp}:{d.isoformat()}"
+                complete = e < today - timedelta(days=3)
+                if not (complete and self.storage.kv_get(wkey)):
+                    n += self.storage.upsert_results(to_rows(prov.results(sport, comp, d, e), d))
+                    if complete:
+                        self.storage.kv_set(wkey, True)
+                d = e + timedelta(days=1)
         self.storage.kv_set(key, time.time())
         return n
 
@@ -111,7 +125,8 @@ class Analyzer:
         if k not in self._games:
             today = date.today()
             if hasattr(self.provider, "scoreboard_range"):
-                gs = self.provider.scoreboard_range(sport, comp, today - timedelta(days=1), today + timedelta(days=8))
+                ahead = 7 if sport != "soccer" else 4
+                gs = self.provider.scoreboard_range(sport, comp, today - timedelta(days=1), today + timedelta(days=ahead))
             else:
                 gs = self.provider.scoreboard(sport, comp, today)
             self._games[k] = gs

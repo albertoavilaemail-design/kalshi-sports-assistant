@@ -173,35 +173,55 @@ class ESPNProvider:
         return ESPN_PATHS[key]
 
     def _params(self, sport: str) -> dict:
-        p: dict[str, Any] = {"limit": 1000}
+        p: dict[str, Any] = {"limit": 300}
         if sport == "ncaaf":
             p["groups"] = 80  # FBS
         return p
 
     def scoreboard(self, sport: str, competition: str, day: date | None = None) -> list[GameState]:
-        params = self._params(sport)
-        if day:
-            params["dates"] = day.strftime("%Y%m%d")
-        data = _get_json(self.session, f"{self.BASE}/{self._path(sport, competition)}/scoreboard", params)
+        return self._fetch(sport, competition, {"dates": day.strftime("%Y%m%d")} if day else {})
+
+    def _fetch(self, sport: str, competition: str, params: dict) -> list[GameState]:
+        p = self._params(sport)
+        p.update(params)
+        data = _get_json(self.session, f"{self.BASE}/{self._path(sport, competition)}/scoreboard", p)
         if not data:
             return []
         return [g for g in (self.parse_event(e, sport, competition) for e in data.get("events") or []) if g]
 
     def scoreboard_range(self, sport: str, competition: str, start: date, end: date) -> list[GameState]:
-        params = self._params(sport)
-        params["dates"] = f"{start:%Y%m%d}-{end:%Y%m%d}"
-        data = _get_json(self.session, f"{self.BASE}/{self._path(sport, competition)}/scoreboard", params)
-        if not data:
-            return []
-        return [g for g in (self.parse_event(e, sport, competition) for e in data.get("events") or []) if g]
+        """ESPN rejects date ranges (HTTP 400 since 2026), so query one day at a time."""
+        seen: dict[str, GameState] = {}
+        d = start
+        while d <= end:
+            for g in self._fetch(sport, competition, {"dates": d.strftime("%Y%m%d")}):
+                seen[g.game_id] = g
+            d += timedelta(days=1)
+        return list(seen.values())
+
+    def history_chunks(self, sport: str, competition: str, start: date, end: date) -> list[tuple[str, Any]]:
+        """Cheap historical queries: football by (season, season type, week), soccer by month."""
+        chunks: list[tuple[str, Any]] = []
+        if sport in ("nfl", "ncaaf"):
+            weeks = {"nfl": [(2, w) for w in range(1, 19)] + [(3, w) for w in range(1, 6)],
+                     "ncaaf": [(2, w) for w in range(1, 17)] + [(3, 1)]}[sport]
+            for season in range(start.year - 1, end.year + 1):
+                for stype, wk in weeks:
+                    chunks.append((f"{season}-{stype}-{wk}",
+                                   lambda season=season, stype=stype, wk=wk: self._fetch(
+                                       sport, competition, {"dates": str(season), "seasontype": stype, "week": wk})))
+        else:
+            y, m = start.year, start.month
+            while (y, m) <= (end.year, end.month):
+                chunks.append((f"{y}{m:02d}", lambda y=y, m=m: self._fetch(sport, competition, {"dates": f"{y}{m:02d}"})))
+                y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+        return chunks
 
     def results(self, sport: str, competition: str, start: date, end: date) -> list[GameState]:
         out: list[GameState] = []
-        d = start
-        while d <= end:
-            chunk_end = min(d + timedelta(days=6), end)
-            out.extend(g for g in self.scoreboard_range(sport, competition, d, chunk_end) if g.status == "final")
-            d = chunk_end + timedelta(days=1)
+        for _, fetch in self.history_chunks(sport, competition, start, end):
+            out.extend(g for g in fetch() if g.status == "final" and g.start_time
+                       and start <= g.start_time.date() <= end)
         return out
 
     def game_detail(self, sport: str, competition: str, game_id: str) -> dict[str, Any]:
