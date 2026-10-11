@@ -14,6 +14,7 @@ they are reported so you can judge them; weather is reported, not modeled.
 """
 from __future__ import annotations
 
+import copy
 import math
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -152,6 +153,47 @@ class FootballModel:
         self.mu_pts = 0.0
         self.n_games = 0
         self.fitted_through: str | None = None
+        self.margin_scale = 1.0  # set by calibrate(): stretches/shrinks predicted margins
+        self.total_bias = 0.0
+        self.calibration_note: str | None = None
+
+    # ------------------------------------------------------------ calibrate
+    def calibrate(self, rows: list[dict], holdout_frac: float = 0.25, min_holdout: int = 40) -> "FootballModel":
+        """Out-of-sample calibration: fit on older games, predict the most recent ones, then set the
+        margin scale and outcome spreads so predictions match what actually happened."""
+        rows = sorted([r for r in rows if r["home_score"] is not None], key=lambda r: str(r["date"]))
+        h = max(min_holdout, int(len(rows) * holdout_frac))
+        if len(rows) - h < 60:
+            self.calibration_note = f"not calibrated (only {len(rows)} games)"
+            return self
+        train, test = rows[:-h], rows[-h:]
+        m = copy.copy(self)
+        m.margin_scale, m.total_bias = 1.0, 0.0
+        m.fit(train)
+        pm, am, pt, at = [], [], [], []
+        for r in test:
+            p = m.predict(r["home"], r["away"], bool(r.get("neutral")))
+            if p.games_home < 3 or p.games_away < 3:
+                continue
+            pm.append(p.mu_margin); am.append(r["home_score"] - r["away_score"])
+            pt.append(p.mu_total); at.append(r["home_score"] + r["away_score"])
+        if len(pm) < 30:
+            self.calibration_note = f"not calibrated (only {len(pm)} usable holdout games)"
+            return self
+        pm, am, pt, at = map(np.array, (pm, am, pt, at))
+        slope = float(np.clip((pm @ am) / max(pm @ pm, 1e-9), 0.8, 2.0))
+        sd_m = float(np.std(am - slope * pm))
+        bias = float(np.mean(at - pt))
+        sd_t = float(np.std(at - pt - bias))
+        ratio = self.team_sd / self.total_sd
+        self.margin_scale = slope
+        self.margin_sd = float(np.clip(sd_m, 0.7 * self.margin_sd, 1.3 * self.margin_sd))
+        self.total_bias = float(np.clip(bias, -7, 7))
+        self.total_sd = float(np.clip(sd_t, 0.7 * self.total_sd, 1.3 * self.total_sd))
+        self.team_sd = self.total_sd * ratio
+        self.calibration_note = (f"calibrated on {len(pm)} recent games: margin x{slope:.2f}, "
+                                 f"sd {self.margin_sd:.1f}, total bias {self.total_bias:+.1f}, total sd {self.total_sd:.1f}")
+        return self
 
     # ------------------------------------------------------------------ fit
     def fit(self, rows: Iterable[dict], as_of: date | None = None) -> "FootballModel":
@@ -218,15 +260,19 @@ class FootballModel:
         rh = self.rating.get(h, self.unknown_prior)
         ra = self.rating.get(a, self.unknown_prior)
         hfa = 0.0 if neutral else self.hfa
-        mu_margin = rh - ra + hfa
+        mu_margin = (rh - ra + hfa) * self.margin_scale
         oh, oa = self.off.get(h, self.unknown_prior / 2), self.off.get(a, self.unknown_prior / 2)
         dh, da = self.dfn.get(h, -self.unknown_prior / 2), self.dfn.get(a, -self.unknown_prior / 2)
         mu = self.mu_pts or (44.0 if self.sport == "nfl" else 55.0)
-        total = max((mu + oh + da) + (mu + oa + dh), 10.0)
+        total = max((mu + oh + da) + (mu + oa + dh) + self.total_bias, 10.0)
         home_pts = (total + mu_margin) / 2
         away_pts = (total - mu_margin) / 2
         gh, ga = self.games.get(h, 0.0), self.games.get(a, 0.0)
         rel = min(1.0, min(gh, ga) / max(self.cfg.min_games_for_full_reliability, 1))
+        if self.calibration_note:
+            notes.append(f"Model {self.calibration_note}.")
+        if self.calibration_note is None or self.calibration_note.startswith("not"):
+            rel *= 0.6
         if self.n_games < 50:
             rel *= 0.5
             notes.append(f"Only {self.n_games} historical games loaded; reliability reduced.")

@@ -115,6 +115,7 @@ class Analyzer:
         rows = [dict(r) for r in self.storage.results(sport, comp if sport == "soccer" else None, since=since)]
         mcfg = self.settings.model
         model = NFLModel(mcfg) if sport == "nfl" else CollegeFootballModel(mcfg) if sport == "ncaaf" else SoccerModel(mcfg)
+        model.calibrate(rows)
         model.fit(rows)
         self._models[k] = model
         return model

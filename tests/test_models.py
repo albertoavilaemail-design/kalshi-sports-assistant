@@ -114,3 +114,15 @@ def test_matrix_shift_preserves_mass():
     m = shift_matrix(score_matrix(0.5, 0.5), 2, 1)
     assert math.isclose(m.sum(), 1.0, abs_tol=1e-9)
     assert np.all(m[:2, :] == 0) and np.all(m[:, :1] == 0)
+
+
+def test_out_of_sample_calibration_sets_parameters():
+    s = settings()
+    rows = synthetic_football_results(n_weeks=40)
+    m = NFLModel(s.model).calibrate(rows).fit(rows)
+    assert m.calibration_note and m.calibration_note.startswith("calibrated")
+    assert 0.8 <= m.margin_scale <= 2.0
+    sm = SoccerModel(s.model).calibrate(synthetic_soccer_results() * 2 if False else synthetic_soccer_results())
+    assert sm.calibration_note  # either calibrated or explains why not
+    tiny = NFLModel(s.model).calibrate(rows[:20])
+    assert tiny.calibration_note.startswith("not calibrated")

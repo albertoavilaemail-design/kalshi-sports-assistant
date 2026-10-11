@@ -115,6 +115,36 @@ class SoccerModel:
         self.base = 1.35
         self.home_adv = 1.15
         self.n_games = 0
+        self.power = 1.0  # set by calibrate(): exponent on team strengths
+        self.calibration_note: str | None = None
+
+    def calibrate(self, rows: list[dict], holdout_frac: float = 0.25, min_holdout: int = 40) -> "SoccerModel":
+        """Choose the strength exponent that minimises out-of-sample log loss on recent matches."""
+        import copy
+        rows = sorted([r for r in rows if r["home_score"] is not None], key=lambda r: str(r["date"]))
+        h = max(min_holdout, int(len(rows) * holdout_frac))
+        if len(rows) - h < 80:
+            self.calibration_note = f"not calibrated (only {len(rows)} matches)"
+            return self
+        m = copy.copy(self)
+        m.power = 1.0
+        m.fit(rows[:-h])
+        test = [r for r in rows[-h:] if normalize_name(r["home"]) in m.attack and normalize_name(r["away"]) in m.attack]
+        if len(test) < 30:
+            self.calibration_note = f"not calibrated (only {len(test)} usable holdout matches)"
+            return self
+        best = (1e9, 1.0)
+        for k in [0.8 + 0.1 * i for i in range(13)]:
+            m.power = k
+            ll = 0.0
+            for r in test:
+                pr = m.predict(r["home"], r["away"]).outcome_probs(self.cfg.soccer_rho)
+                o = "home" if r["home_score"] > r["away_score"] else "away" if r["home_score"] < r["away_score"] else "draw"
+                ll -= math.log(max(pr[o], 1e-6))
+            best = min(best, (ll / len(test), k))
+        self.power = best[1]
+        self.calibration_note = f"calibrated on {len(test)} recent matches: strength exponent {self.power:.1f}, log loss {best[0]:.3f}"
+        return self
 
     def fit(self, rows: Iterable[dict], as_of: date | None = None, iterations: int = 60) -> "SoccerModel":
         rows = [r for r in rows if r["home_score"] is not None]
@@ -171,10 +201,15 @@ class SoccerModel:
         notes = [f"No historical matches found for {n}; using league-average strength (assumption)."
                  for t, n in ((h, home), (a, away)) if t not in self.attack]
         ha = 1.0 if neutral else self.home_adv
-        lam_h = self.base * ha * self.attack.get(h, 1.0) * self.defence.get(a, 1.0)
-        lam_a = self.base / (1.0 if neutral else self.home_adv) * self.attack.get(a, 1.0) * self.defence.get(h, 1.0)
+        k = self.power
+        lam_h = self.base * ha * (self.attack.get(h, 1.0) * self.defence.get(a, 1.0)) ** k
+        lam_a = self.base / (1.0 if neutral else self.home_adv) * (self.attack.get(a, 1.0) * self.defence.get(h, 1.0)) ** k
         gh, ga = self.games.get(h, 0.0), self.games.get(a, 0.0)
         rel = min(1.0, min(gh, ga) / max(self.cfg.min_games_for_full_reliability, 1))
+        if self.calibration_note:
+            notes.append(f"Model {self.calibration_note}.")
+        if self.calibration_note is None or self.calibration_note.startswith("not"):
+            rel *= 0.6
         if self.n_games < 60:
             rel *= 0.5
             notes.append(f"Only {self.n_games} historical matches loaded; reliability reduced.")
