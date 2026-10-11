@@ -1,0 +1,10 @@
+football/nfl {'dates': '2025', 'seasontype': 2, 'week': 5} 200 14
+football/nfl {'dates': '2025', 'seasontype': 3, 'week': 1} 200 6
+football/nfl {'dates': '2026', 'seasontype': 2, 'week': 6} 200 14
+football/college-football {'dates': '2025', 'seasontype': 2, 'week': 5, 'groups': 80, 'limit': 300} 200 53
+football/college-football {'dates': '2026', 'seasontype': 2, 'week': 7, 'groups': 80, 'limit': 300} 200 62
+football/college-football {'dates': '20261010', 'groups': 80, 'limit': 300} 200 46
+soccer/eng.1 {'dates': '20250920'} 200 7
+soccer/eng.1 {'dates': '202509'} 200 30
+soccer/eng.1 {'dates': '2025'} 200 100
+soccer/uefa.champions {'dates': '20251001'} 200 9
