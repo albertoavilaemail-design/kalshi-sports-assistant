@@ -230,7 +230,19 @@ class Analyzer:
         pairs = self.opportunities(analyses, account, budget)
         ranked = rank([o for o, _ in pairs], only_qualifying=False)
         by_id = {id(o): a for o, a in pairs}
-        return [(o, by_id[id(o)]) for o in ranked], analyses
+        # One pick per game x market type x period: alternate lines of the same market are the same bet.
+        seen: set = set()
+        out = []
+        for o in ranked:
+            a = by_id[id(o)]
+            spec = a.market.spec
+            key = (a.market.event_ticker.split("-", 1)[-1], spec.kind if spec else "?", spec.period if spec else "?")
+            if o.qualifies and key in seen:
+                continue
+            if o.qualifies:
+                seen.add(key)
+            out.append((o, a))
+        return out, analyses
 
     def market_by_ticker(self, ticker: str) -> SportsMarket | None:
         """Load one market directly (e.g. for an open position) with its series classification."""

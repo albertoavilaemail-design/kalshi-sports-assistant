@@ -50,6 +50,8 @@ jobs:
           echo "Estimates only - not guarantees. Paper/recommendation mode." >> "$GITHUB_STEP_SUMMARY"
       - name: Pregame alerts to Telegram (skipped quietly if Telegram secrets are not set)
         run: kalshi-assistant monitor --pregame
+      - name: Paper-trade the top picks (fake money) to measure whether the model beats the market
+        run: kalshi-assistant paper auto --max 3
       - name: Settle finished paper trades
         run: kalshi-assistant paper settle
       - name: Save state

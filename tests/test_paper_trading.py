@@ -76,3 +76,14 @@ def test_performance_reports_losses_and_real_account_is_separate():
     t.open_position("real", "R", "yes", 1, 0.5, enforce_limits=False)
     assert Bankroll(st, s.risk).cash("paper") == 25 - 0.52
     assert "No trades" in PaperTrader(storage(), s).performance("paper")
+
+
+def test_validation_status_requires_sample_and_beating_market():
+    from kalshi_assistant.paper_trading import validation_status
+    st = storage()
+    ok, msg = validation_status(st)
+    assert not ok and "NOT YET VALIDATED" in msg
+    for i in range(100):
+        st.conn.execute("INSERT INTO predictions(ts,model_prob,market_price,outcome) VALUES(0,?,?,?)", (0.6, 0.5, i % 2))
+    ok, msg = validation_status(st)
+    assert not ok and "UNDERPERFORMING" in msg  # model 0.6 vs coin-flip outcomes is worse than market 0.5

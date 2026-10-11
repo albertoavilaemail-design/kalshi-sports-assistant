@@ -62,6 +62,8 @@ def cmd_scan(ctx: Ctx, args) -> None:
         print("Why markets were skipped:")
         for reason, n in why.most_common(6):
             print(f"  {n:4d} x {reason[:140]}")
+    from .paper_trading import validation_status
+    print(validation_status(ctx.storage)[1])
     print(format_ranked(pairs, args.limit, show_all=args.all))
 
 

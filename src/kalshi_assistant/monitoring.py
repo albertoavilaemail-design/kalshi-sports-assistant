@@ -59,6 +59,11 @@ class Monitor:
         resize(fresh, opp.contracts, self.settings)
         return fresh.qualifies
 
+    def _banner(self) -> str:
+        from .paper_trading import validation_status
+        ok, text = validation_status(self.storage)
+        return "" if ok else f"[{text}]\n"
+
     def _watch_match(self, mk: SportsMarket) -> bool:
         hay = f"{mk.event_ticker} {mk.event_title}".lower()
         return any(q.lower() in hay or all(p in hay for p in q.lower().split() if len(p) > 2)
@@ -146,7 +151,7 @@ class Monitor:
         # entries
         for o, a in rep.entries[:3]:
             key = Notifier.make_key("entry", o.market.ticker, o.side, round(o.price, 2))
-            n.send("live_entry", key, opportunity_alert(o, a) + "\n" + rep.momentum.describe(game),
+            n.send("live_entry", key, self._banner() + opportunity_alert(o, a) + "\n" + rep.momentum.describe(game),
                    recheck=lambda o=o: self._recheck(o))
         # exits: alert when the decision changes
         for e in rep.exits:
@@ -192,7 +197,7 @@ class Monitor:
             if o.net_ev_per_dollar() < self.settings.notify.min_net_ev_per_dollar_alert:
                 continue
             key = Notifier.make_key("pregame", o.market.ticker, o.side, round(o.price, 2))
-            self.notifier.send("pregame", key, opportunity_alert(o, a), recheck=lambda o=o: self._recheck(o))
+            self.notifier.send("pregame", key, self._banner() + opportunity_alert(o, a), recheck=lambda o=o: self._recheck(o))
 
     def _position_health(self, markets: list[SportsMarket], out: list[str]) -> None:
         tickers = {m.ticker for m in markets}

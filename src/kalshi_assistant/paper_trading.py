@@ -207,3 +207,17 @@ class PaperTrader:
                 lines.append(f"  By {label}: " + " | ".join(parts))
         lines.append("  Reminder: no strategy is proven profitable until a large sample with realistic fees says so.")
         return "\n".join(lines)
+
+
+def validation_status(storage: Storage, min_settled: int = 100) -> tuple[bool, str]:
+    """The model counts as validated only after enough settled paper predictions AND a Brier score
+    at least as good as the market's own prices on the same contracts."""
+    rows = [dict(r) for r in storage.q("SELECT model_prob, market_price, outcome FROM predictions WHERE outcome IS NOT NULL AND market_price IS NOT NULL")]
+    n = len(rows)
+    if n < min_settled:
+        return False, f"MODEL NOT YET VALIDATED: {n}/{min_settled} settled paper predictions. Treat picks as experiments, not advice."
+    mb = brier([r["model_prob"] for r in rows], [r["outcome"] for r in rows])
+    kb = brier([r["market_price"] for r in rows], [r["outcome"] for r in rows])
+    if mb > kb:
+        return False, f"MODEL UNDERPERFORMING THE MARKET (Brier {mb:.4f} vs market {kb:.4f}, n={n}). Do not trade real money on these picks."
+    return True, f"Model validated on {n} settled predictions (Brier {mb:.4f} vs market {kb:.4f})."
