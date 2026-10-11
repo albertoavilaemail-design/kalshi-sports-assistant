@@ -109,3 +109,14 @@ def test_huge_model_market_gap_never_qualifies():
     assert not o.qualifies and any("missing information" in r for r in o.fail_reasons)
     ok = evaluate_side(market(yes_bid=0.48, yes_ask=0.50), "yes", 0.60, 1.0, s)
     assert ok.qualifies
+
+
+def test_price_band_and_quarter_markets_excluded_by_default():
+    from kalshi_assistant.config import Settings
+    d = Settings().value
+    assert (d.min_price, d.max_price) == (0.20, 0.80) and "Q1" not in d.allowed_periods
+    s = settings(min_edge=0.0, min_net_ev_per_dollar=0.0)
+    s.value.min_price, s.value.max_price = 0.20, 0.80
+    assert any("range" in r for r in evaluate_side(market(yes_bid=0.05, yes_ask=0.06), "yes", 0.10, 1.0, s).fail_reasons)
+    q = evaluate_side(market(spec=ContractSpec("total", period="Q1", line=10.5)), "yes", 0.6, 1.0, s)
+    assert any("Q1 markets" in r for r in q.fail_reasons)

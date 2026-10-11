@@ -16,6 +16,7 @@ def settings(**value_overrides) -> Settings:
     s.db_path = ":memory:"
     s.value.model_weight = 1.0  # tests check raw math unless they opt in
     s.value.max_model_market_gap = 1.0  # guard tested separately
+    s.value.min_price, s.value.max_price = 0.01, 0.99
     for k, v in value_overrides.items():
         setattr(s.value, k, v)
     return s

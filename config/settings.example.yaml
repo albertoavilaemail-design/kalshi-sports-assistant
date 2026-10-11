@@ -26,6 +26,9 @@ value:
   slippage_per_contract: 0.0
   model_weight: 0.6           # 1.0 = trust model fully; lower = shrink toward market price
   max_model_market_gap: 0.15  # bigger model-vs-market gaps are treated as missing info, never as edge
+  min_price: 0.20             # long shots / heavy favourites excluded (model least reliable there)
+  max_price: 0.80
+  allowed_periods: [full, 1H, 2H]   # add Q1..Q4 to also trade quarter markets
 
 live:
   interval_seconds: 60

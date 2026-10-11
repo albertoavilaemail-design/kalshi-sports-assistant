@@ -131,6 +131,10 @@ def _qualify(opp: Opportunity, s: Settings, now: float | None) -> None:
         gap = abs(opp.model_prob_raw - side_mid)
         if gap > v.max_model_market_gap:
             r.append(f"model differs from market by {gap:.0%} (> {v.max_model_market_gap:.0%}): treated as missing information, not an edge")
+    if not v.min_price <= opp.price <= v.max_price:
+        r.append(f"price ${opp.price:.2f} outside the ${v.min_price:.2f}-${v.max_price:.2f} range where the model is trusted")
+    if mk.spec is not None and mk.spec.period not in v.allowed_periods:
+        r.append(f"{mk.spec.period} markets are not traded by default (value.allowed_periods)")
     if opp.reliability < v.min_reliability:
         r.append(f"model reliability {opp.reliability:.2f} below {v.min_reliability:.2f}")
     if opp.edge < v.min_edge:

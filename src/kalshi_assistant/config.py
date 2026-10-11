@@ -61,6 +61,12 @@ class ValueConfig:
     # If the pure model differs from the market mid by more than this, the market almost certainly
     # knows something the model doesn't (injury, live game state, model error) -> never qualifies.
     max_model_market_gap: float = 0.15
+    # Normal/Poisson approximations are least reliable in the tails (first live run showed the model
+    # systematically overpricing 4-11c long shots), so only mid-range prices can qualify.
+    min_price: float = 0.20
+    max_price: float = 0.80
+    # Quarter markets need play-level data the free feeds don't provide reliably.
+    allowed_periods: list[str] = field(default_factory=lambda: ["full", "1H", "2H"])
     taker_fee_rate: float = 0.07  # Kalshi general schedule coefficient
     maker_fee_rate: float = 0.0175
     max_report: int = 10
