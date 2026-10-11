@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kalshi-sports-assistant"
+version = "1.0.0"
+description = "Kalshi sports market scanner, value engine, live/halftime analysis, paper trading and Telegram alerts (no real orders)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+  "requests>=2.31",      # HTTP for Kalshi, ESPN, football-data.org, Open-Meteo, Telegram
+  "PyYAML>=6.0",         # settings.yaml
+  "numpy>=1.26",         # ridge regression and Poisson score matrices
+  "cryptography>=42",    # Kalshi request signing (RSA-PSS / Ed25519), only when an API key is set
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+kalshi-assistant = "kalshi_assistant.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

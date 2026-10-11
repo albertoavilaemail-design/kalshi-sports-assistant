@@ -1,0 +1,49 @@
+name: monitor-games
+# Best-effort live/halftime checks during typical game windows.
+# GitHub cron is NOT real-time: runs can start several minutes late or be skipped under load.
+# For reliable halftime/in-game alerts run `kalshi-assistant monitor --loop` on an always-on machine.
+on:
+  schedule:
+    - cron: "*/10 11-23 * * 0,6"   # Sat/Sun: European soccer + college/NFL afternoons (UTC)
+    - cron: "*/10 0-4 * * 0,1"     # Sat/Sun night US games (UTC after midnight)
+    - cron: "*/10 23 * * 1,4,5"    # Mon/Thu/Fri night kickoffs
+    - cron: "*/10 0-3 * * 2,5,6"   # ...and their second halves
+    - cron: "*/10 18-21 * * 2,3"   # Champions League Tue/Wed
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: bot-state
+  cancel-in-progress: false
+jobs:
+  monitor:
+    if: ${{ vars.KSA_DISABLED != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      KSA_CONFIG: config/settings.example.yaml   # edit this file (no secrets) to change Actions behaviour
+      KSA_DB_PATH: data/assistant.db
+      KSA_LOG_LEVEL: WARNING
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      KALSHI_API_KEY_ID: ${{ secrets.KALSHI_API_KEY_ID }}
+      KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY }}
+      FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install .
+      - name: Restore state
+        run: bash scripts/state.sh pull
+      - name: Monitoring pass (live games, halftime, positions)
+        run: |
+          set -o pipefail
+          kalshi-assistant monitor 2>&1 | tee monitor.txt
+          { echo '```'; cat monitor.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: Save state
+        if: always()
+        run: bash scripts/state.sh push

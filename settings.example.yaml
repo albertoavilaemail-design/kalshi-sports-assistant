@@ -1,0 +1,69 @@
+# Copy to config/settings.yaml and adjust. NEVER put secrets here - use .env / GitHub secrets.
+db_path: data/assistant.db
+log_level: WARNING
+
+kalshi:
+  environment: prod          # prod | demo
+  stale_after_seconds: 120   # prices older than this are "stale" -> no actionable recommendation
+
+risk:                        # entertainment bankroll rules
+  starting_bankroll: 25.0
+  min_position_dollars: 0.50
+  max_position_dollars: 1.00
+  kelly_fraction: 0.25
+  max_total_exposure_pct: 0.40
+  max_event_exposure_dollars: 2.00   # correlated positions on one game
+  daily_loss_limit_dollars: 5.00
+  weekly_loss_limit_dollars: 10.00
+  allow_fractional_contracts: false
+
+value:
+  min_edge: 0.04              # estimated prob - price
+  min_net_ev_per_dollar: 0.05 # after fees
+  max_spread: 0.08
+  min_depth_contracts: 5
+  min_reliability: 0.45
+  slippage_per_contract: 0.0
+  model_weight: 0.6           # 1.0 = trust model fully; lower = shrink toward market price
+
+live:
+  interval_seconds: 60
+  prob_change_alert: 0.06
+  price_move_alert: 0.08
+  momentum_window_minutes: 10
+  momentum_weight: 0.0        # momentum is reported; set >0 only after paper-trading evidence
+  hold_sell_margin: 0.01
+  football_possession_value: 0.0
+  soccer_red_card_own_factor: 0.70
+  soccer_red_card_opp_factor: 1.25
+  scan_all_live_games: true
+
+model:
+  version: v1.0
+  nfl_home_adv: 1.8
+  cfb_home_adv: 2.8
+  history_days: 420
+
+sports:
+  enabled: [nfl, ncaaf, soccer]
+  soccer_competitions: [epl, ucl, laliga, bundesliga, seriea, ligue1, mls]
+  soccer_results_provider: espn   # or football-data (needs FOOTBALL_DATA_API_KEY)
+  # Pin series the classifier gets wrong (check with `kalshi-assistant discover --verbose`):
+  series_overrides: {}
+  #   KXNFLGAME: {sport: nfl, market_type: winner}
+  #   KXEPLTOTAL: {sport: soccer, competition: epl, market_type: total}
+  extra_series: []
+
+notify:
+  enabled: true
+  dedup_minutes: 90
+  min_net_ev_per_dollar_alert: 0.05
+
+execution:
+  enabled: false              # real orders are not implemented in this version
+  require_manual_approval: true
+  kill_switch: true
+
+explain:
+  enabled: false              # facts-only Claude explanations (needs ANTHROPIC_API_KEY, paid)
+  model: claude-sonnet-5-5

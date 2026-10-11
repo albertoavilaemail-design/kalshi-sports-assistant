@@ -1,0 +1,39 @@
+name: daily-summary
+on:
+  schedule:
+    - cron: "3 13 * * *"   # ~8am Central (CDT)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: bot-state
+  cancel-in-progress: false
+jobs:
+  summary:
+    if: ${{ vars.KSA_DISABLED != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KSA_CONFIG: config/settings.example.yaml   # edit this file (no secrets) to change Actions behaviour
+      KSA_DB_PATH: data/assistant.db
+      KSA_LOG_LEVEL: WARNING
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      KALSHI_API_KEY_ID: ${{ secrets.KALSHI_API_KEY_ID }}
+      KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY }}
+      FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install .
+      - name: Restore state
+        run: bash scripts/state.sh pull
+      - run: kalshi-assistant paper settle
+      - run: kalshi-assistant summary --send
+      - name: Save state
+        if: always()
+        run: bash scripts/state.sh push
