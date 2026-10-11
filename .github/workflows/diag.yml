@@ -1,0 +1,30 @@
+name: diag
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY' > diag.txt 2>&1
+          import requests, datetime
+          B="https://site.api.espn.com/apis/site/v2/sports"
+          t=datetime.date.today(); d=t.strftime("%Y%m%d"); d2=(t+datetime.timedelta(days=8)).strftime("%Y%m%d"); dm=(t-datetime.timedelta(days=1)).strftime("%Y%m%d")
+          tests=[("football/nfl",{}),("football/nfl",{"dates":d}),("football/nfl",{"dates":f"{dm}-{d2}"}),("football/nfl",{"dates":f"{dm}-{d2}","limit":1000}),
+                 ("football/nfl",{"limit":1000}),("football/nfl",{"limit":100}),("football/nfl",{"dates":"20251001-20251007"}),
+                 ("football/college-football",{"dates":d,"groups":80}),("football/college-football",{"dates":f"{dm}-{d2}","groups":80}),
+                 ("football/college-football",{"dates":f"{dm}-{d2}","groups":80,"limit":300}),
+                 ("soccer/eng.1",{}),("soccer/eng.1",{"dates":f"{dm}-{d2}"}),("soccer/eng.1",{"dates":f"{dm}-{d2}","limit":100})]
+          for path,p in tests:
+              try:
+                  r=requests.get(f"{B}/{path}/scoreboard",params=p,timeout=20)
+                  n=len(r.json().get("events",[])) if r.status_code==200 else r.text[:150]
+                  print(path,p,r.status_code,n)
+              except Exception as e: print(path,p,"ERR",e)
+          PY
+          cat diag.txt
+          git config user.name state-bot; git config user.email state-bot@users.noreply.github.com
+          B=$(git hash-object -w diag.txt); T=$(printf '100644 blob %s\tdiag.txt\n' $B | git mktree); C=$(git commit-tree $T -m diag)
+          git push -f origin $C:refs/heads/diag
