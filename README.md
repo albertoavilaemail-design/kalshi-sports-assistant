@@ -132,8 +132,8 @@ Did you place a real trade on Kalshi yourself? Track it so the hold/sell engine 
 2. Repo → **Actions** tab → enable workflows.
 3. Workflows:
    - `tests.yml`: runs the test suite on every push.
-   - `scan_markets.yml`: pregame scan + settlement, 3×/day.
-   - `monitor_games.yml`: live/halftime pass every ~10 min in typical game windows (best effort).
+   - `scan_markets.yml`: hourly scan + dashboard + paper trades + settlement, and every ~10 min during game windows.
+   - (live/halftime checks are part of `scan_markets.yml`: every ~10 min in game windows, best effort).
    - `daily_summary.yml`: morning summary to Telegram.
 4. Actions settings come from `config/settings.example.yaml` (no secrets in it). Edit that file to change thresholds for Actions.
 5. State (bankroll, positions, alerts) lives in SQLite. It is saved to a separate **`bot-state`** branch after each run (`scripts/state.sh`). Runs share one `concurrency` group, so they never overlap.

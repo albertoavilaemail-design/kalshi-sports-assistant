@@ -1,10 +1,17 @@
 name: scan-markets
-# Pregame scan + settlement of finished paper trades, a few times per day.
+# One job does everything: scan + dashboard, live/halftime checks, paper trades, settlement.
+# Hourly, plus every 10 minutes during typical game windows. GitHub cron is best-effort (can run late).
 on:
   push:
     branches: [main]              # runs automatically as soon as you upload/commit files
   schedule:
     - cron: "17 * * * *"          # every hour (free for public repos); keeps the dashboard fresh
+    # extra runs every 10 min in typical game windows (UTC) for live/halftime checks
+    - cron: "*/10 11-23 * * 0,6"
+    - cron: "*/10 0-4 * * 0,1"
+    - cron: "*/10 23 * * 1,4,5"
+    - cron: "*/10 0-3 * * 2,5,6"
+    - cron: "*/10 18-21 * * 2,3"
   workflow_dispatch:
 permissions:
   contents: write   # needed to save the database to the bot-state branch
@@ -20,7 +27,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     if: ${{ vars.KSA_DISABLED != 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     env:
       KSA_CONFIG: config/settings.example.yaml   # edit this file (no secrets) to change Actions behaviour
       KSA_DB_PATH: data/assistant.db
@@ -53,9 +60,10 @@ jobs:
           cat reports/last_scan.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "scan produced no output" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "Estimates only - not guarantees. Paper/recommendation mode." >> "$GITHUB_STEP_SUMMARY"
-      - name: Pregame alerts to Telegram (skipped quietly if Telegram secrets are not set)
+      - name: Live games, halftime reports and alerts (prints alerts if Telegram is not set up)
         run: kalshi-assistant monitor --pregame
       - name: Paper-trade the top picks (fake money) to measure whether the model beats the market
+        if: github.event_name != 'schedule' || github.event.schedule == '17 * * * *'
         run: kalshi-assistant paper auto --max 3
       - name: Settle finished paper trades
         run: kalshi-assistant paper settle
