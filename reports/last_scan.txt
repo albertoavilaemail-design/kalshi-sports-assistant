@@ -1,0 +1,66 @@
+Scanned 17716 Kalshi markets (11472 priced by the model, 6244 DATA UNAVAILABLE).
+Why markets were skipped:
+  6226 x No matching game found in the sports data feed.
+    18 x Live game state incomplete (clock/period/score missing) or market type unsupported.
+MODEL NOT YET VALIDATED: 35/100 settled paper predictions. Treat picks as experiments, not advice.
+Price check: NOT CONVINCING - prices moved toward our picks only 43% of the time (away 39%, avg +0.1c) across 727 picks. The 'edges' look like model error.
+No qualifying trades found. Showing best candidates for reference:
+ 1. [NCAAF/ncaaf] Charlotte vs Temple: 1st Half Total (Sat 10/17 05:00PM, live)
+    NOT (Total > 13.5 [1H]) -> BUY NO @ $0.01 | est. prob 23.3% (model 23.3%) | edge +0.223 | net EV/$ +20.599
+    size 50 contract(s), cost $0.54, max loss $0.54, profit if right $49.46 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Temple Owls 7-7 Charlotte 49ers | period 2 clock 1:43 | by period [7.0, 0.0] / [7.0, 0.0]
+ 2. [NCAAF/ncaaf] UMass vs Buffalo: 1st Half Total (Sat 10/17 05:00PM, live)
+    NOT (Total > 13.5 [1H]) -> BUY NO @ $0.01 | est. prob 14.5% (model 14.5%) | edge +0.135 | net EV/$ +12.513
+    size 40 contract(s), cost $0.43, max loss $0.43, profit if right $39.57 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Buffalo Bulls 8-7 Massachusetts Minutemen | period 2 clock 2:00 | by period [3.0, 5.0] / [7.0, 0.0]
+ 3. [NCAAF/ncaaf] Western Michigan vs Central Michigan: 1st Half Total (Sat 10/17 05:30PM, live)
+    NOT (Total > 6.5 [1H]) -> BUY NO @ $0.01 | est. prob 10.0% (model 10.0%) | edge +0.090 | net EV/$ +8.261
+    size 25 contract(s), cost $0.27, max loss $0.27, profit if right $24.73 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Central Michigan Chippewas 0-7 Western Michigan Broncos | period 2 clock 14:07 | by period [0.0, 0.0] / [7.0, 0.0]
+ 4. [NCAAF/ncaaf] Pittsburgh vs Boston College: 3rd Quarter Total (Sat 10/17 04:00PM, live)
+    NOT (Total > 7.5 [Q3]) -> BUY NO @ $0.01 | est. prob 5.1% (model 5.1%) | edge +0.041 | net EV/$ +3.763
+    size 25 contract(s), cost $0.27, max loss $0.27, profit if right $24.73 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Boston College Eagles 21-15 Pittsburgh Panthers | period 3 clock 10:22 | by period [7.0, 7.0, 7.0] / [12.0, 0.0, 3.0]
+ 5. [NCAAF/ncaaf] Charlotte vs Temple: 1st Half Winner (Sat 10/17 05:00PM, live)
+    Charlotte wins [1H] -> BUY YES @ $0.05 | est. prob 22.3% (model 34.2%) | edge +0.173 | net EV/$ +3.155
+    size 16 contract(s), cost $0.86, max loss $0.86, profit if right $15.14 | does not qualify: model differs from market by 30% (> 15%): treated as missing information, not an edge; price $0.05 outside the $0.20-$0.80 range where the model is trusted
+    live: Temple Owls 7-7 Charlotte 49ers | period 2 clock 1:43 | by period [7.0, 0.0] / [7.0, 0.0]
+ 6. [NCAAF/ncaaf] Charlotte vs Temple: 1st Half Total (Sat 10/17 05:00PM, live)
+    NOT (Total > 16.5 [1H]) -> BUY NO @ $0.10 | est. prob 42.6% (model 65.6%) | edge +0.326 | net EV/$ +2.993
+    size 9 contract(s), cost $0.96, max loss $0.96, profit if right $8.04 | does not qualify: model differs from market by 58% (> 15%): treated as missing information, not an edge; price $0.10 outside the $0.20-$0.80 range where the model is trusted
+    live: Temple Owls 7-7 Charlotte 49ers | period 2 clock 1:43 | by period [7.0, 0.0] / [7.0, 0.0]
+ 7. [NCAAF/ncaaf] UMass vs Buffalo: 1st Half Winner (Sat 10/17 05:00PM, live)
+    Draw / tie [1H] -> BUY YES @ $0.03 | est. prob 12.3% (model 12.3%) | edge +0.093 | net EV/$ +2.798
+    size 13 contract(s), cost $0.42, max loss $0.42, profit if right $12.58 | does not qualify: no two-sided quote (bid or ask missing); price $0.03 outside the $0.20-$0.80 range where the model is trusted
+    live: Buffalo Bulls 8-7 Massachusetts Minutemen | period 2 clock 2:00 | by period [3.0, 5.0] / [7.0, 0.0]
+ 8. [NCAAF/ncaaf] The Citadel vs Texas A&M: 1st Half Total (Sat 10/17 05:00PM, live)
+    NOT (Total > 20.5 [1H]) -> BUY NO @ $0.01 | est. prob 21.3% (model 21.3%) | edge +0.203 | net EV/$ +18.732
+    size 50 contract(s), cost $0.54, max loss $0.54, profit if right $49.46 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Texas A&M Aggies 21-0 The Citadel Bulldogs | period 2 clock 2:00 | by period [7.0, 14.0] / [0.0, 0.0]
+ 9. [NCAAF/ncaaf] Western Michigan vs Central Michigan: 1st Half Total (Sat 10/17 05:30PM, live)
+    NOT (Total > 2.5 [1H]) -> BUY NO @ $0.01 | est. prob 3.5% (model 3.5%) | edge +0.025 | net EV/$ +2.274
+    size 25 contract(s), cost $0.27, max loss $0.27, profit if right $24.73 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Central Michigan Chippewas 0-7 Western Michigan Broncos | period 2 clock 14:07 | by period [0.0, 0.0] / [7.0, 0.0]
+10. [NCAAF/ncaaf] Northern Illinois vs Wyoming: 1st Half Total (Sat 10/17 07:30PM, pregame)
+    NOT (Total > 2.5 [1H]) -> BUY NO @ $0.02 | est. prob 6.7% (model 10.1%) | edge +0.047 | net EV/$ +2.054
+    size 16 contract(s), cost $0.35, max loss $0.35, profit if right $15.65 | does not qualify: price $0.02 outside the $0.20-$0.80 range where the model is trusted; risk limit: total exposure would exceed 40% of equity ($10.13)
+11. [NCAAF/ncaaf] Northern Illinois vs Wyoming: Team Total (Sat 10/17 07:30PM, pregame)
+    NOT (Northern Illinois total > 2.5) -> BUY NO @ $0.04 | est. prob 12.2% (model 18.0%) | edge +0.082 | net EV/$ +1.839
+    size 10 contract(s), cost $0.43, max loss $0.43, profit if right $9.57 | does not qualify: price $0.04 outside the $0.20-$0.80 range where the model is trusted; risk limit: total exposure would exceed 40% of equity ($10.13)
+12. [NCAAF/ncaaf] Ball St. vs Bowling Green: Total Points (Sat 10/17 04:00PM, live)
+    NOT (Total > 24.5) -> BUY NO @ $0.01 | est. prob 2.8% (model 2.8%) | edge +0.018 | net EV/$ +1.612
+    size 25 contract(s), cost $0.27, max loss $0.27, profit if right $24.73 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Bowling Green Falcons 10-17 Ball State Cardinals | period 3 clock 1:30 | by period [0.0, 10.0, 0.0] / [3.0, 7.0, 7.0]
+13. [NCAAF/ncaaf] Charlotte vs Temple: 1st Half Spread (Sat 10/17 05:00PM, live)
+    NOT (Temple wins by more than 2.5 [1H]) -> BUY NO @ $0.19 | est. prob 52.1% (model 75.2%) | edge +0.331 | net EV/$ +1.575
+    size 4 contract(s), cost $0.81, max loss $0.81, profit if right $3.19 | does not qualify: model differs from market by 58% (> 15%): treated as missing information, not an edge; price $0.19 outside the $0.20-$0.80 range where the model is trusted
+    live: Temple Owls 7-7 Charlotte 49ers | period 2 clock 1:43 | by period [7.0, 0.0] / [7.0, 0.0]
+14. [NCAAF/ncaaf] The Citadel vs Texas A&M: 1st Half Total (Sat 10/17 05:00PM, live)
+    NOT (Total > 19.5 [1H]) -> BUY NO @ $0.01 | est. prob 12.6% (model 12.6%) | edge +0.116 | net EV/$ +10.589
+    size 34 contract(s), cost $0.37, max loss $0.37, profit if right $33.63 | does not qualify: no two-sided quote (bid or ask missing); price $0.01 outside the $0.20-$0.80 range where the model is trusted
+    live: Texas A&M Aggies 21-0 The Citadel Bulldogs | period 2 clock 2:00 | by period [7.0, 14.0] / [0.0, 0.0]
+15. [NCAAF/ncaaf] Florida vs Texas: Total Points (Sat 10/17 04:00PM, live)
+    NOT (Total > 36.5) -> BUY NO @ $0.04 | est. prob 10.8% (model 10.8%) | edge +0.068 | net EV/$ +1.514
+    size 10 contract(s), cost $0.43, max loss $0.43, profit if right $9.57 | does not qualify: no two-sided quote (bid or ask missing); price $0.04 outside the $0.20-$0.80 range where the model is trusted
+    live: Texas Longhorns 17-10 Florida Gators | period 3 clock 8:07 | by period [10.0, 7.0, 0.0] / [0.0, 10.0, 0.0]
+Dashboard written to site/index.html
