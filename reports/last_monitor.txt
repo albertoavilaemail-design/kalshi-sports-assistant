@@ -1,0 +1,444 @@
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Nevada vs UTEP: Team Total
+Score: UTEP Miners 7 - 23 Nevada Wolf Pack (0:42, P3)
+Market: Nevada total > 29.5 -> BUY YES
+Price: $0.51 (implied 51%) | Est. prob 57% (estimate)
+Net EV after fees: $+0.043 (+8.1% per $)
+Size: 1 contract(s) | Max loss $0.53 | Profit if right $0.47
+Reliability: 0.67
+Risks: model may be missing news/injuries
+https://kalshi.com/markets/kxncaafteamtotal
+Momentum (last 10 min): Nevada Wolf Pack on a 7-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Nevada vs UTEP: Team Total
+Score: UTEP Miners 7 - 23 Nevada Wolf Pack (0:42, P3)
+Market: Nevada total > 23.5 -> BUY YES
+Price: $0.77 (implied 77%) | Est. prob 85% (estimate)
+Net EV after fees: $+0.059 (+7.4% per $)
+Size: 1 contract(s) | Max loss $0.79 | Profit if right $0.21
+Reliability: 0.67
+Risks: model may be missing news/injuries
+https://kalshi.com/markets/kxncaafteamtotal
+Momentum (last 10 min): Nevada Wolf Pack on a 7-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+######## HALFTIME REPORT: James Madison Dukes at Georgia Southern Eagles ########
+Pregame expectation Model: Georgia Southern Eagles 19.5 - 38.1 James Madison Dukes (margin -18.6, total 57.5; sd 17.2/16.2); games in data: 8/8 (recency-weighted)
+First half: Georgia Southern Eagles 10 - 6 James Madison Dukes (0:00, P2)
+  By period: Georgia Southern Eagles [7.0, 3.0] | James Madison Dukes [3.0, 3.0]
+First-half team stats [FACT - espn (unofficial public API)]:
+  James Madison Dukes: 1st Downs 14, 3rd down efficiency 4-9, 4th down efficiency 0-1, Total Yards 184, Passing 62, Comp/Att 7/17, Yards per pass 3.6, Rushing 122
+  Georgia Southern Eagles: 1st Downs 10, 3rd down efficiency 3-6, 4th down efficiency 0-0, Total Yards 173, Passing 123, Comp/Att 9/15, Yards per pass 8.2, Rushing 50
+How the outlook changed [MODEL ESTIMATES]:
+  Georgia Southern total > 9.5: pregame 80.7% -> now 90.0% | Kalshi YES bid/ask None/None
+  Georgia Southern total > 13.5: pregame 69.8% -> now 78.8% | Kalshi YES bid/ask 0.78/0.81
+  Georgia Southern total > 16.5: pregame 60.1% -> now 66.9% | Kalshi YES bid/ask 0.7/0.73
+  Georgia Southern total > 19.5: pregame 49.8% -> now 53.0% | Kalshi YES bid/ask 0.54/0.57
+  Georgia Southern total > 20.5: pregame 46.4% -> now 48.1% | Kalshi YES bid/ask 0.45/0.48
+  Georgia Southern total > 22.5: pregame 39.5% -> now 38.7% | Kalshi YES bid/ask 0.43/0.46
+  Georgia Southern total > 23.5: pregame 36.2% -> now 34.1% | Kalshi YES bid/ask 0.37/0.4
+  Georgia Southern total > 27.5: pregame 24.2% -> now 18.6% | Kalshi YES bid/ask 0.23/0.25
+  Georgia Southern total > 30.5: pregame 16.8% -> now 10.5% | Kalshi YES bid/ask 0.16/0.18
+  Georgia Southern total > 34.5: pregame 9.5% -> now 4.1% | Kalshi YES bid/ask 0.1/0.11
+
+=== HALFTIME DECISIONS: James Madison Dukes at Georgia Southern Eagles ===
+Score: Georgia Southern Eagles 10 - 6 James Madison Dukes (0:00, P2)
+Momentum (last 10 min): no scoring edge.
+  Momentum tilt applied to probabilities: +0.00  (off by default: live.momentum_weight = 0)
+
+1) ENTER A NEW POSITION?
+   No qualifying trades found.
+   (near miss) James Madison total > 20.5 YES @ $0.51: model differs from market by 24% (> 15%): treated as missing information, not an edge
+   (near miss) James Madison total > 23.5 YES @ $0.39: model differs from market by 23% (> 15%): treated as missing information, not an edge
+   (near miss) James Madison total > 19.5 YES @ $0.58: model differs from market by 21% (> 15%): treated as missing information, not an edge
+
+2) KEEP HOLDING EXISTING POSITIONS?
+   No open positions on this game.
+
+3) SELL EXISTING POSITIONS?
+   Selling is not preferred for any open position right now.
+All probabilities are model estimates, not guarantees.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+LSU vs Kentucky: 2nd Half Spread
+Score: Kentucky Wildcats 21 - 20 LSU Tigers (15:00, P4)
+Market: LSU wins by more than 3.5 [2H] -> BUY YES
+Price: $0.48 (implied 48%) | Est. prob 53% (estimate)
+Net EV after fees: $+0.026 (+5.2% per $)
+Size: 1 contract(s) | Max loss $0.50 | Profit if right $0.50
+Reliability: 0.77
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaaf2hspread
+Momentum (last 10 min): LSU Tigers on a 3-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Kansas vs Utah: 2nd Half Spread
+Score: Utah Utes 21 - 14 Kansas Jayhawks (0:34, P2)
+Market: Utah wins by more than 10.5 [2H] -> BUY YES
+Price: $0.38 (implied 38%) | Est. prob 43% (estimate)
+Net EV after fees: $+0.031 (+7.7% per $)
+Size: 1 contract(s) | Max loss $0.40 | Profit if right $0.60
+Reliability: 0.66
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaaf2hspread
+Momentum (last 10 min): Kansas Jayhawks on a 7-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Georgia vs Alabama: 2nd Half Total
+Score: Alabama Crimson Tide 14 - 10 Georgia Bulldogs (15:00, P3)
+Market: Total > 20.5 [2H] -> BUY YES
+Price: $0.70 (implied 70%) | Est. prob 77% (estimate)
+Net EV after fees: $+0.054 (+7.5% per $)
+Size: 1 contract(s) | Max loss $0.72 | Profit if right $0.28
+Reliability: 0.83
+Risks: model may be missing news/injuries
+https://kalshi.com/markets/kxncaaf2htotal
+Momentum: not enough history yet (needs snapshots over 10 min).
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Austin FC vs Nashville SC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Minnesota United FC vs Houston Dynamo FC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Austin FC vs Nashville SC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Minnesota United FC vs Houston Dynamo FC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Austin FC vs Nashville SC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Minnesota United FC vs Houston Dynamo FC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (SOCCER)
+Colorado vs San Jose
+Score: Colorado Rapids 0 - 0 San Jose Earthquakes (7', P1)
+Market: NOT (Colorado wins) -> BUY NO
+Price: $0.49 (implied 49%) | Est. prob 54% (estimate)
+Net EV after fees: $+0.030 (+5.9% per $)
+Size: 1 contract(s) | Max loss $0.51 | Profit if right $0.49
+Reliability: 1.00
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxmlsgame
+Momentum: not enough history yet (needs snapshots over 10 min).
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Coastal Carolina vs Marshall: Total Points
+Score: Marshall Thundering Herd 7 - 27 Coastal Carolina Chanticleers (6:50, P4)
+Market: NOT (Total > 41.5) -> BUY NO
+Price: $0.48 (implied 48%) | Est. prob 53% (estimate)
+Net EV after fees: $+0.028 (+5.6% per $)
+Size: 1 contract(s) | Max loss $0.50 | Profit if right $0.50
+Reliability: 0.76
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaaftotal
+Momentum (last 10 min): no scoring edge.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+LSU vs Kentucky: Total Points
+Score: Kentucky Wildcats 21 - 20 LSU Tigers (15:00, P4)
+Market: NOT (Total > 56.5) -> BUY NO
+Price: $0.50 (implied 50%) | Est. prob 55% (estimate)
+Net EV after fees: $+0.031 (+6.0% per $)
+Size: 1 contract(s) | Max loss $0.52 | Profit if right $0.48
+Reliability: 0.77
+Risks: model may be missing news/injuries
+https://kalshi.com/markets/kxncaaftotal
+Momentum (last 10 min): LSU Tigers on a 3-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+LSU vs Kentucky: Total Points
+Score: Kentucky Wildcats 21 - 20 LSU Tigers (15:00, P4)
+Market: NOT (Total > 53.5) -> BUY NO
+Price: $0.36 (implied 36%) | Est. prob 41% (estimate)
+Net EV after fees: $+0.029 (+7.5% per $)
+Size: 1 contract(s) | Max loss $0.38 | Profit if right $0.62
+Reliability: 0.77
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaaftotal
+Momentum (last 10 min): LSU Tigers on a 3-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Air Force vs Northern Illinois: Total Points
+Score: Northern Illinois Huskies 7 - 28 Air Force Falcons (6:26, P4)
+Market: NOT (Total > 47.5) -> BUY NO
+Price: $0.79 (implied 79%) | Est. prob 85% (estimate)
+Net EV after fees: $+0.042 (+5.2% per $)
+Size: 1 contract(s) | Max loss $0.81 | Profit if right $0.19
+Reliability: 0.67
+Risks: model may be missing news/injuries
+https://kalshi.com/markets/kxncaaftotal
+Momentum (last 10 min): no scoring edge.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Louisiana vs Louisiana Tech: Total Points
+Score: Louisiana Tech Bulldogs 13 - 24 Louisiana Ragin' Cajuns (1:29, P3)
+Market: Total > 48.5 -> BUY YES
+Price: $0.55 (implied 55%) | Est. prob 61% (estimate)
+Net EV after fees: $+0.042 (+7.3% per $)
+Size: 1 contract(s) | Max loss $0.57 | Profit if right $0.43
+Reliability: 0.70
+Risks: model may be missing news/injuries
+https://kalshi.com/markets/kxncaaftotal
+Momentum (last 10 min): Louisiana Ragin' Cajuns on a 7-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+LSU vs Kentucky: Spread
+Score: Kentucky Wildcats 21 - 20 LSU Tigers (15:00, P4)
+Market: LSU wins by more than 5.5 -> BUY YES
+Price: $0.22 (implied 22%) | Est. prob 26% (estimate)
+Net EV after fees: $+0.058 (+12.3% per $)
+Size: 2 contract(s) | Max loss $0.47 | Profit if right $1.53
+Reliability: 0.77
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum (last 10 min): LSU Tigers on a 3-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+LSU vs Kentucky: Spread
+Score: Kentucky Wildcats 21 - 20 LSU Tigers (15:00, P4)
+Market: LSU wins by more than 3.5 -> BUY YES
+Price: $0.29 (implied 29%) | Est. prob 35% (estimate)
+Net EV after fees: $+0.036 (+11.6% per $)
+Size: 1 contract(s) | Max loss $0.31 | Profit if right $0.69
+Reliability: 0.77
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum (last 10 min): LSU Tigers on a 3-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+LSU vs Kentucky: Spread
+Score: Kentucky Wildcats 21 - 20 LSU Tigers (15:00, P4)
+Market: LSU wins by more than 4.5 -> BUY YES
+Price: $0.25 (implied 25%) | Est. prob 30% (estimate)
+Net EV after fees: $+0.030 (+11.3% per $)
+Size: 1 contract(s) | Max loss $0.27 | Profit if right $0.73
+Reliability: 0.77
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum (last 10 min): LSU Tigers on a 3-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Nevada vs UTEP: Spread
+Score: UTEP Miners 7 - 23 Nevada Wolf Pack (0:42, P3)
+Market: Nevada wins by more than 17.5 -> BUY YES
+Price: $0.44 (implied 44%) | Est. prob 49% (estimate)
+Net EV after fees: $+0.026 (+5.6% per $)
+Size: 1 contract(s) | Max loss $0.46 | Profit if right $0.54
+Reliability: 0.67
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum (last 10 min): Nevada Wolf Pack on a 7-0 run.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Georgia vs Alabama: Spread
+Score: Alabama Crimson Tide 14 - 10 Georgia Bulldogs (15:00, P3)
+Market: Alabama wins by more than 10.5 -> BUY YES
+Price: $0.22 (implied 22%) | Est. prob 28% (estimate)
+Net EV after fees: $+0.093 (+19.9% per $)
+Size: 2 contract(s) | Max loss $0.47 | Profit if right $1.53
+Reliability: 0.83
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum: not enough history yet (needs snapshots over 10 min).
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Georgia vs Alabama: Spread
+Score: Alabama Crimson Tide 14 - 10 Georgia Bulldogs (15:00, P3)
+Market: Alabama wins by more than 9.5 -> BUY YES
+Price: $0.25 (implied 25%) | Est. prob 31% (estimate)
+Net EV after fees: $+0.042 (+15.4% per $)
+Size: 1 contract(s) | Max loss $0.27 | Profit if right $0.73
+Reliability: 0.83
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum: not enough history yet (needs snapshots over 10 min).
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+LIVE LIVE OPPORTUNITY (NCAAF)
+Georgia vs Alabama: Spread
+Score: Alabama Crimson Tide 14 - 10 Georgia Bulldogs (15:00, P3)
+Market: Alabama wins by more than 7.5 -> BUY YES
+Price: $0.30 (implied 30%) | Est. prob 37% (estimate)
+Net EV after fees: $+0.047 (+14.6% per $)
+Size: 1 contract(s) | Max loss $0.32 | Profit if right $0.68
+Reliability: 0.83
+Risks: Per-order fee rounding is large relative to this small position.
+https://kalshi.com/markets/kxncaafspread
+Momentum: not enough history yet (needs snapshots over 10 min).
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Austin FC vs Nashville SC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+---- ALERT (not sent: Telegram not configured) ----
+DATA UNAVAILABLE for all markets in Minnesota United FC vs Houston Dynamo FC; live recommendations suppressed.
+Live game state incomplete (clock/period/score missing) or market type unsupported.
+
+[2026-10-11 01:48 UTC] Estimates, not guarantees. Paper/recommendation mode.
+9720 open sports markets discovered.
+139 live game(s) to evaluate.
+Coastal Carolina Chanticleers at Marshall Thundering Herd: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 1 entry signal(s), 0 position(s) checked
+Nevada Wolf Pack at UTEP Miners: 3 entry signal(s), 0 position(s) checked
+UAB Blazers at Memphis Tigers: 0 entry signal(s), 0 position(s) checked
+Air Force Falcons at Northern Illinois Huskies: 0 entry signal(s), 0 position(s) checked
+Halftime report: James Madison Dukes at Georgia Southern Eagles
+Syracuse Orange at Virginia Cavaliers: 4 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 3 entry signal(s), 0 position(s) checked
+Louisiana Ragin' Cajuns at Louisiana Tech Bulldogs: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 2 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 1 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 1 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 1 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Coastal Carolina Chanticleers at Marshall Thundering Herd: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Nevada Wolf Pack at UTEP Miners: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+UAB Blazers at Memphis Tigers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Louisiana Ragin' Cajuns at Louisiana Tech Bulldogs: 0 entry signal(s), 0 position(s) checked
+Air Force Falcons at Northern Illinois Huskies: 0 entry signal(s), 0 position(s) checked
+USC Trojans at Penn State Nittany Lions: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 1 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Coastal Carolina Chanticleers at Marshall Thundering Herd: 1 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 2 entry signal(s), 0 position(s) checked
+Nevada Wolf Pack at UTEP Miners: 0 entry signal(s), 0 position(s) checked
+UAB Blazers at Memphis Tigers: 0 entry signal(s), 0 position(s) checked
+Air Force Falcons at Northern Illinois Huskies: 1 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Louisiana Ragin' Cajuns at Louisiana Tech Bulldogs: 6 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Coastal Carolina Chanticleers at Marshall Thundering Herd: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 3 entry signal(s), 0 position(s) checked
+Nevada Wolf Pack at UTEP Miners: 1 entry signal(s), 0 position(s) checked
+UAB Blazers at Memphis Tigers: 0 entry signal(s), 0 position(s) checked
+Air Force Falcons at Northern Illinois Huskies: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 6 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 7 entry signal(s), 0 position(s) checked
+Louisiana Ragin' Cajuns at Louisiana Tech Bulldogs: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 1 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+LSU Tigers at Kentucky Wildcats: 0 entry signal(s), 0 position(s) checked
+Syracuse Orange at Virginia Cavaliers: 0 entry signal(s), 0 position(s) checked
+Georgia Bulldogs at Alabama Crimson Tide: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Kansas Jayhawks at Utah Utes: 0 entry signal(s), 0 position(s) checked
+Austin FC vs Nashville SC: 0 entry signal(s), 0 position(s) checked
+Minnesota United FC vs Houston Dynamo FC: 0 entry signal(s), 0 position(s) checked
+Colorado Rapids vs San Jose Earthquakes: 0 entry signal(s), 0 position(s) checked

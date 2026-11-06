@@ -1,0 +1,54 @@
+Scanned 7887 Kalshi markets (4371 priced by the model, 3516 DATA UNAVAILABLE).
+Why markets were skipped:
+  3514 x No matching game found in the sports data feed.
+     1 x Could not confidently match Kalshi team 'PSG wins 2nd Half' to Paris Saint-Germain / Barcelona.
+     1 x Could not confidently match Kalshi team 'PSG wins 1st Half' to Paris Saint-Germain / Barcelona.
+MODEL NOT YET VALIDATED: 71/100 settled paper predictions. Treat picks as experiments, not advice.
+Price check: NOT CONVINCING - prices moved toward our picks only 43% of the time (away 41%, avg +0.2c) across 1018 picks. The 'edges' look like model error.
+62 qualifying opportunities (ranked by net EV x reliability x liquidity)
+ 1. [NCAAF/ncaaf] Vanderbilt vs Kentucky (Sat 10/24 11:30PM, pregame)
+    Vanderbilt wins -> BUY YES @ $0.20 | est. prob 28.0% (model 33.7%) | edge +0.080 | net EV/$ +0.305
+    size 2 contract(s), cost $0.43, max loss $0.43, profit if right $1.57 | QUALIFIES
+ 2. [NCAAF/ncaaf] North Texas vs Navy: Spread (Sat 10/24 07:30PM, pregame)
+    North Texas wins by more than 13.5 -> BUY YES @ $0.20 | est. prob 26.3% (model 31.8%) | edge +0.063 | net EV/$ +0.221
+    size 2 contract(s), cost $0.43, max loss $0.43, profit if right $1.57 | QUALIFIES
+ 3. [NCAAF/ncaaf] Louisiana vs Southern Miss: Spread (Sat 10/24 09:00PM, pregame)
+    Southern Miss wins by more than 2.5 -> BUY YES @ $0.20 | est. prob 26.3% (model 31.8%) | edge +0.063 | net EV/$ +0.223
+    size 2 contract(s), cost $0.43, max loss $0.43, profit if right $1.57 | QUALIFIES
+ 4. [NCAAF/ncaaf] Vanderbilt vs Kentucky: Spread (Sat 10/24 11:30PM, pregame)
+    Vanderbilt wins by more than 1.5 -> BUY YES @ $0.20 | est. prob 25.1% (model 30.5%) | edge +0.051 | net EV/$ +0.167
+    size 2 contract(s), cost $0.43, max loss $0.43, profit if right $1.57 | QUALIFIES
+ 5. [NFL/nfl] Dallas vs Green Bay: Spread (Mon 10/19 12:20AM, pregame)
+    Green Bay wins by more than 7.5 -> BUY YES @ $0.24 | est. prob 30.3% (model 34.8%) | edge +0.063 | net EV/$ +0.165
+    size 1 contract(s), cost $0.26, max loss $0.26, profit if right $0.74 | QUALIFIES
+ 6. [NCAAF/ncaaf] Old Dominion vs Louisiana Tech (Sat 10/24 09:00PM, pregame)
+    NOT (Louisiana Tech wins) -> BUY NO @ $0.21 | est. prob 26.1% (model 29.8%) | edge +0.051 | net EV/$ +0.159
+    size 2 contract(s), cost $0.45, max loss $0.45, profit if right $1.55 | QUALIFIES
+ 7. [NCAAF/ncaaf] Tennessee vs South Carolina: Spread (Sat 10/24 07:30PM, pregame)
+    Tennessee wins by more than 11.5 -> BUY YES @ $0.22 | est. prob 27.4% (model 32.4%) | edge +0.054 | net EV/$ +0.167
+    size 2 contract(s), cost $0.47, max loss $0.47, profit if right $1.53 | QUALIFIES
+ 8. [NCAAF/ncaaf] UTSA vs Tulane: Spread (Sun 10/25 12:00AM, pregame)
+    Tulane wins by more than 5.5 -> BUY YES @ $0.30 | est. prob 36.9% (model 42.9%) | edge +0.069 | net EV/$ +0.154
+    size 1 contract(s), cost $0.32, max loss $0.32, profit if right $0.68 | QUALIFIES
+ 9. [NCAAF/ncaaf] Vanderbilt vs Kentucky: Total Points (Sat 10/24 11:30PM, pregame)
+    Total > 61.5 -> BUY YES @ $0.27 | est. prob 33.1% (model 38.5%) | edge +0.061 | net EV/$ +0.142
+    size 1 contract(s), cost $0.29, max loss $0.29, profit if right $0.71 | QUALIFIES
+10. [NCAAF/ncaaf] LSU vs Auburn: Team Total (Sat 10/24 04:00PM, pregame)
+    NOT (LSU total > 20.5) -> BUY NO @ $0.22 | est. prob 27.6% (model 32.6%) | edge +0.056 | net EV/$ +0.173
+    size 2 contract(s), cost $0.47, max loss $0.47, profit if right $1.53 | QUALIFIES
+11. [NCAAF/ncaaf] Duke vs Virginia: Spread (Fri 10/23 11:00PM, pregame)
+    Virginia wins by more than 11.5 -> BUY YES @ $0.21 | est. prob 25.7% (model 30.2%) | edge +0.047 | net EV/$ +0.144
+    size 2 contract(s), cost $0.45, max loss $0.45, profit if right $1.55 | QUALIFIES
+12. [NCAAF/ncaaf] LSU vs Auburn (Sat 10/24 04:00PM, pregame)
+    NOT (LSU wins) -> BUY NO @ $0.27 | est. prob 33.4% (model 37.9%) | edge +0.064 | net EV/$ +0.151
+    size 1 contract(s), cost $0.29, max loss $0.29, profit if right $0.71 | QUALIFIES
+13. [NCAAF/ncaaf] UTSA vs Tulane: Team Total (Sun 10/25 12:00AM, pregame)
+    NOT (UTSA total > 19.5) -> BUY NO @ $0.24 | est. prob 29.6% (model 35.3%) | edge +0.056 | net EV/$ +0.137
+    size 1 contract(s), cost $0.26, max loss $0.26, profit if right $0.74 | QUALIFIES
+14. [NCAAF/ncaaf] Texas A&M vs Alabama: Spread (Sat 10/24 07:30PM, pregame)
+    NOT (Alabama wins by more than 3.5) -> BUY NO @ $0.25 | est. prob 30.4% (model 35.4%) | edge +0.054 | net EV/$ +0.127
+    size 1 contract(s), cost $0.27, max loss $0.27, profit if right $0.73 | QUALIFIES
+15. [NCAAF/ncaaf] Iowa vs Minnesota: Total Points (Sat 10/24 07:30PM, pregame)
+    Total > 51.5 -> BUY YES @ $0.24 | est. prob 29.6% (model 34.7%) | edge +0.056 | net EV/$ +0.140
+    size 1 contract(s), cost $0.26, max loss $0.26, profit if right $0.74 | QUALIFIES
+Dashboard written to site/index.html
